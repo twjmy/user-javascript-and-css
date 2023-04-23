@@ -1,7 +1,7 @@
 # [User JavaScript and CSS(Chrome extension)](https://chrome.google.com/webstore/detail/user-javascript-and-css/nbhcbdghjpllgmfilhnhkllmkecfmpld)
 網頁自訂 JavaScript, CSS by VJ  
 小技巧: 插件的自訂標題(Name)可用HTML  
-(我還不想看 Chrome 插件的><)
+(我還不想看 Chrome 插件的文件><)
 
 ### [iLearning 3.0 1 位驗證碼](/lms2020.js)
 URL: https://lms2020.nchu.edu.tw  
