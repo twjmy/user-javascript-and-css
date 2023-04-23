@@ -122,7 +122,7 @@ TOPBAR_show('light_1');
   while (!document.querySelector(qagree) || !document.hasFocus())
     await new Promise(resolve => requestAnimationFrame(resolve));
   qagree = searchsky.placeholder;
-  let s = 5;
+  let s = 10;
   for (const sleep = resolve => setTimeout(resolve, 1000); s > 0; s--) {
     searchsky.placeholder = `${s} 秒後播放動畫...`;
     await new Promise(sleep);
