@@ -7,7 +7,7 @@
   while (
     !document.querySelector(more) ||
     !document.querySelector(activeDay) ||
-    document.querySelector(icon).src.indexOf(`data:image`) + 1)
-    await new Promise(resolve => requestAnimationFrame(resolve));
+    document.querySelector(icon).src.indexOf(`data:image`) + 1
+  ) await new Promise(resolve => requestAnimationFrame(resolve));
   document.querySelector(activeDay).click();
 }();
