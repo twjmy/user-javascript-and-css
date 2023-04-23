@@ -22,5 +22,5 @@ URL: https://ani.gamer.com.tw/animeVideo.php?sn=*
 ### [頁面編輯](/*.js)
 URL: *  
 <kbd>Alt</kbd>+<kbd>Enter</kbd>=全螢幕模式  
-<kbd>F2</kbd>=切換contenteditable/plaintext-only  
-<kbd>F4</kbd>=<code>userSelect='text'</code>
+<kbd>F2</kbd>=切換`contenteditable`  
+<kbd>F4</kbd>=`userSelect='text'`
