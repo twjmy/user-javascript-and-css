@@ -118,7 +118,8 @@ TOPBAR_show('light_1');
   adskip = `.videoAdUiSkipButton.videoAdUiAction.videoAdUiRedesignedSkipButton`,
   nadskip = `.nativeAD-skip-button.enable`,
   fullscreen = `.vjs-fullscreen-control:not(.fullscreen-close)`,
-  searchsky = window[`anime-search-sky`]) {
+  searchsky = window[`anime-search-sky`]
+) {
   while (!document.querySelector(qagree) || !document.hasFocus())
     await new Promise(resolve => requestAnimationFrame(resolve));
   qagree = searchsky.placeholder;
@@ -143,7 +144,8 @@ TOPBAR_show('light_1');
   while (!document.hasFocus() ||
     !document.querySelector(adskip) ||
     !document.querySelector(nadskip) ||
-    !document.querySelector(ended)) {
+    !document.querySelector(ended)
+  ) {
     await new Promise(resolve => requestAnimationFrame(resolve));
     if (document.querySelector(ended)) { //no AD
       next(10);
