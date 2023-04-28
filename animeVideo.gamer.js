@@ -1,7 +1,10 @@
+const 倒計時_秒 = 10;
 async function next(s = 0) {
   for (const sleep = resolve => setTimeout(resolve, 1000); s > 0; s--) {
     danmutxt.placeholder = `${s} 秒後播放下一集/訂閱的動畫...`;
     await new Promise(sleep);
+    while (!document.hasFocus())
+      await new Promise(resolve => requestAnimationFrame(resolve));
     if (esc()) {
       danmutxt.placeholder = `已取消繼續播放`;
       for (s = 3; s > 0; s--) await new Promise(sleep);
@@ -13,23 +16,16 @@ async function next(s = 0) {
   let next = '';
   if (document.querySelector(".vjs-next-button.vjs-hidden")) {
     for (const a of document.querySelectorAll(`#topBarMsgList_light_1 > div > a[data-gtm-notification="ani"]`)) {
-      //  console.log(`
-      //  a.href=${a.href}
-      //  document.URL=${document.URL}
-      //  next=${next}
-      //  `);
       if (a.href == document.URL) {
         if (!next)
           danmutxt.placeholder = `⚠️找不到下一部最近更新的動畫`;
         else open(next, "_self");
-        // console.log(`open(next, "_self");`);
         return;
       }
       next = a.href;
     }
   } else {
     $('.vjs-next-button').click();
-    // console.log(`$('.vjs-next-button').click();`);
   }
 }
 function agree(event = null) {
@@ -37,7 +33,6 @@ function agree(event = null) {
   if (document.querySelector(qagree)) {
     if (event) event.preventDefault();
     $(qagree).click();
-    // console.log(`$(qagree).click();`);
   }
 }
 function skip(event = null) {
@@ -46,11 +41,9 @@ function skip(event = null) {
   if (document.querySelector(adskip)) {
     if (event) event.preventDefault();
     $(adskip).click();
-    // console.log(`$(adskip).click();`);
   } else if (document.querySelector(nadskip)) {
     if (event) event.preventDefault();
     $(nadskip).click();
-    // console.log(`$(nadskip).click();`);
   }
 }
 let ifcancel = false;
@@ -60,12 +53,13 @@ function esc() {
     return true;
   } else return false;
 }
-addEventListener('keyup', (event) => {
+addEventListener('keyup', event => {
   if (!$('.danmu-text').is(':focus')) {
     // console.log(event.key);
     switch (event.key) {
       case 'Enter':
-        document.querySelector(`button.vjs-playing`).click();
+        if (document.querySelector(`.vjs-playing`))
+          ani_video_html5_api.pause();
         danmutxt.focus({ focusVisible: true });
         return;
       case 'Escape':
@@ -92,11 +86,15 @@ addEventListener('keyup', (event) => {
         return;
       case `j`:
         ani_video_html5_api.currentTime += 87;
+        return;
+      case `J`:
+        ani_video_html5_api.currentTime -= 90;
+        return;
     }
   }
 }, true);
 
-addEventListener('keydown', (event) => {
+addEventListener('keydown', event => {
   if (event.defaulPrevented) return;
   if (event.key === ' ' && (
     document.querySelector(`.vjs-ended`) ||
@@ -114,19 +112,22 @@ TOPBAR_show('light_1');
 
 ~async function (
   ended = `.vjs-ended`,
+  error = `.vjs-error`,
   qagree = `.choose-btn-agree`,
   adskip = `.videoAdUiSkipButton.videoAdUiAction.videoAdUiRedesignedSkipButton`,
   nadskip = `.nativeAD-skip-button.enable`,
   fullscreen = `.vjs-fullscreen-control:not(.fullscreen-close)`,
-  searchsky = window[`anime-search-sky`]
+  searchsky = window[`anime-search-sky`],
+  s = 倒計時_秒,
 ) {
-  while (!document.querySelector(qagree) || !document.hasFocus())
+  while (!document.querySelector(qagree))
     await new Promise(resolve => requestAnimationFrame(resolve));
   qagree = searchsky.placeholder;
-  let s = 10;
   for (const sleep = resolve => setTimeout(resolve, 1000); s > 0; s--) {
     searchsky.placeholder = `${s} 秒後播放動畫...`;
     await new Promise(sleep);
+    while (!document.hasFocus())
+      await new Promise(resolve => requestAnimationFrame(resolve));
     if (esc()) {
       searchsky.placeholder = `已取消自動播放動畫`;
       for (s = 3; s > 0; s--) await new Promise(sleep);
@@ -141,19 +142,28 @@ TOPBAR_show('light_1');
     searchsky.placeholder = qagree;
     ani_video.requestFullscreen();
   }
-  while (!document.hasFocus() ||
+  while (
     !document.querySelector(adskip) ||
     !document.querySelector(nadskip) ||
     !document.querySelector(ended)
   ) {
     await new Promise(resolve => requestAnimationFrame(resolve));
     if (document.querySelector(ended)) { //no AD
-      next(10);
+      next(倒計時_秒);
       return;
+    } else if (document.querySelector(error)) {
+      const sleep = resolve => setTimeout(resolve, 1000);
+      const e = document.createElement(`div`);
+      document.querySelector(`.vjs-error-display>div`).appendChild(e);
+      for (s = 3; s > 0; s--) {
+        await new Promise(sleep);
+        e.innerHTML = `${s} 秒後重新整理...`;
+      }
+      location.reload();
     }
   }
   skip();
-  while (!document.hasFocus() || !document.querySelector(ended))
+  while (!document.querySelector(ended))
     await new Promise(resolve => setTimeout(resolve, 1000));
-  next(10);
+  next(倒計時_秒);
 }();
