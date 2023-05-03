@@ -12,10 +12,13 @@ URL: https://act.hoyolab.com/ys/event/signin-sea-*
 ### [巴哈姆特動漫瘋外掛](/animeVideo.gamer.js)和[自訂介面](/animeVideo.gamer.css)
 URL: https://ani.gamer.com.tw/animeVideo.php?sn=*  
 
-+ 打開頁面倒數 10 秒自動播放動畫(Esc 取消)
-+ 動畫結束倒數 10 秒自動播放下一集/訂閱的動畫(Esc 取消)
+倒計時_秒(X) 預設為 5 可自行修改
++ 打開頁面倒數 X 秒自動播放動畫(Esc 取消)
++ 動畫結束倒數 X 秒自動播放下一集/訂閱的動畫(Esc 取消)
++ 傳輸中斷倒數 X 秒自動重新整理(Esc 取消)
 
-<kbd>N</kbd>=訂閱; <kbd>J</kbd>=快進87秒  
+<kbd>N</kbd>=訂閱  
+[<kbd>Shift</kbd>+]<kbd>J</kbd>=快進87秒/倒退90秒  
 <kbd>Shift</kbd>+<kbd>P</kbd>/<kbd>N</kbd>=上一集/下一集  
 <kbd>␣</kbd>=同意年齡分級/跳過廣告(廣告中按下會讓畫面變黑並靜音)
 

@@ -1,4 +1,4 @@
-const 倒計時_秒 = 10;
+const 倒計時_秒 = 5;
 async function next(s = 0) {
   for (const sleep = resolve => setTimeout(resolve, 1000); s > 0; s--) {
     danmutxt.placeholder = `${s} 秒後播放下一集/訂閱的動畫...`;
@@ -16,16 +16,23 @@ async function next(s = 0) {
   let next = '';
   if (document.querySelector(".vjs-next-button.vjs-hidden")) {
     for (const a of document.querySelectorAll(`#topBarMsgList_light_1 > div > a[data-gtm-notification="ani"]`)) {
+      // console.log(`
+      //   a.href=${a.href}
+      //   document.URL=${document.URL}
+      //   next=${next}
+      // `);
       if (a.href == document.URL) {
         if (!next)
           danmutxt.placeholder = `⚠️找不到下一部最近更新的動畫`;
         else open(next, "_self");
+        // console.log(`open(next, "_self");`);
         return;
       }
       next = a.href;
     }
   } else {
     $('.vjs-next-button').click();
+    // console.log(`$('.vjs-next-button').click();`);
   }
 }
 function agree(event = null) {
@@ -33,6 +40,7 @@ function agree(event = null) {
   if (document.querySelector(qagree)) {
     if (event) event.preventDefault();
     $(qagree).click();
+    // console.log(`$(qagree).click();`);
   }
 }
 function skip(event = null) {
@@ -112,7 +120,7 @@ TOPBAR_show('light_1');
 
 ~async function (
   ended = `.vjs-ended`,
-  error = `.vjs-error`,
+  error = `.vjs-error-display>div`,
   qagree = `.choose-btn-agree`,
   adskip = `.videoAdUiSkipButton.videoAdUiAction.videoAdUiRedesignedSkipButton`,
   nadskip = `.nativeAD-skip-button.enable`,
@@ -154,12 +162,17 @@ TOPBAR_show('light_1');
     } else if (document.querySelector(error)) {
       const sleep = resolve => setTimeout(resolve, 1000);
       const e = document.createElement(`div`);
-      document.querySelector(`.vjs-error-display>div`).appendChild(e);
+      document.querySelector(error).appendChild(e);
       for (s = 3; s > 0; s--) {
         await new Promise(sleep);
         e.innerHTML = `${s} 秒後重新整理...`;
       }
-      location.reload();
+      if (esc()) {
+        e.innerHTML = `已取消重新整理...`;
+        for (s = 3; s > 0; s--) await new Promise(sleep);
+        e.remove();
+        return;
+      } else location.reload();
     }
   }
   skip();
