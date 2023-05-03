@@ -4,7 +4,7 @@ async function next(s = 0) {
     danmutxt.placeholder = `${s} 秒後播放下一集/訂閱的動畫...`;
     await new Promise(sleep);
     while (!document.hasFocus())
-      await new Promise(resolve => requestAnimationFrame(resolve));
+      await new Promise(requestAnimationFrame);
     if (esc()) {
       danmutxt.placeholder = `已取消繼續播放`;
       for (s = 3; s > 0; s--) await new Promise(sleep);
@@ -129,13 +129,13 @@ TOPBAR_show('light_1');
   s = 倒計時_秒,
 ) {
   while (!document.querySelector(qagree))
-    await new Promise(resolve => requestAnimationFrame(resolve));
+    await new Promise(requestAnimationFrame);
   qagree = searchsky.placeholder;
   for (const sleep = resolve => setTimeout(resolve, 1000); s > 0; s--) {
     searchsky.placeholder = `${s} 秒後播放動畫...`;
     await new Promise(sleep);
     while (!document.hasFocus())
-      await new Promise(resolve => requestAnimationFrame(resolve));
+      await new Promise(requestAnimationFrame);
     if (esc()) {
       searchsky.placeholder = `已取消自動播放動畫`;
       for (s = 3; s > 0; s--) await new Promise(sleep);
@@ -155,7 +155,7 @@ TOPBAR_show('light_1');
     !document.querySelector(nadskip) ||
     !document.querySelector(ended)
   ) {
-    await new Promise(resolve => requestAnimationFrame(resolve));
+    await new Promise(requestAnimationFrame);
     if (document.querySelector(ended)) { //no AD
       next(倒計時_秒);
       return;
@@ -177,6 +177,6 @@ TOPBAR_show('light_1');
   }
   skip();
   while (!document.querySelector(ended))
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise(requestAnimationFrame);
   next(倒計時_秒);
 }();
