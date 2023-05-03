@@ -120,7 +120,7 @@ TOPBAR_show('light_1');
 
 ~async function (
   ended = `.vjs-ended`,
-  error = `.vjs-error-display>div`,
+  error = `.vjs-error>.vjs-error-display>div`,
   qagree = `.choose-btn-agree`,
   adskip = `.videoAdUiSkipButton.videoAdUiAction.videoAdUiRedesignedSkipButton`,
   nadskip = `.nativeAD-skip-button.enable`,
