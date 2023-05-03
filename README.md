@@ -22,7 +22,7 @@ URL: https://ani.gamer.com.tw/animeVideo.php?sn=*
 <kbd>Shift</kbd>+<kbd>P</kbd>/<kbd>N</kbd>=上一集/下一集  
 <kbd>␣</kbd>=同意年齡分級/跳過廣告(廣告中按下會讓畫面變黑並靜音)
 
-### [頁面編輯](/*.js)
+### [頁面編輯](/all.js)
 URL: *  
 <kbd>Alt</kbd>+<kbd>Enter</kbd>=全螢幕模式  
 <kbd>F2</kbd>=切換`contenteditable`  
