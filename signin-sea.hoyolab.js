@@ -2,12 +2,12 @@
   icon = `.mhy-hoyolab-account-block__avatar-icon`,
   blah = `.components-home-assets-__sign-content_---`,
   blahc = `.components-common-`,
-  dialog = blahc + `common-dialog-__index_---sign-content---3PZVVu`,
   signWrapper = blah + `sign-wrapper---38rWqB`,
   mend = blah + `mend-btn---FhiXMP`,
   remind = blahc + `remind-__index_---remind-btn---1IIL1i`,
   finish = blahc + `task-__index_---task-finish---2y0qCh`,
   resign = blahc + `resign-modal-__index_---resign-btn---3oGNt6`,
+  dialog = blahc + `common-dialog-__index_---sign-content---3PZVVu`,
 ) {
   while (
     !document.querySelector(signWrapper) ||

@@ -7,7 +7,10 @@ function toggleContentEditable() {
   if (document.documentElement.contentEditable == 'inherit') {
     document.documentElement.setAttribute('contenteditable', '');
     hint('按下 F2 即可結束網頁編輯模式');
-  } else document.documentElement.contentEditable = 'inherit';
+  } else {
+    document.documentElement.contentEditable = 'inherit';
+    hint('結束網頁編輯模式');
+  }
 }
 
 const userSelect = document.createElement("style");
@@ -18,30 +21,38 @@ function toggleUserSelect() {
   if (!document.querySelector(`#userSelect`)) {
     document.documentElement.appendChild(userSelect);
     hint('按下 F4 即可結束網頁選取模式');
-  } else userSelect.remove();
+  } else {
+    userSelect.remove();
+    hint('結束網頁選取模式');
+  }
 }
 
-const el = document.createElement("div");
-el.setAttribute('class', 'modal');
-// https://jsfiddle.net/Tq5m3/43/
-function hint(msg = null, duration = 1000) {
-  el.removeAttribute('style')
-  el.setAttribute('style', `
-		background-color: rgba(0,0,0,0.5);
-		color:white; 
-		position: sticky;
-		bottom:95%;
-		padding:10px;
-		font-weight:bold;
-		text-align: center;
-		z-index:2147483647;
-    	`);
-  el.innerHTML = msg;
-  setTimeout(() => el.parentNode.removeChild(el), duration);
-  document.body.appendChild(el);
+const modal = document.createElement("div");
+modal.setAttribute('class', 'modal');
+modal.style.cssText = `
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translateX(-50%) translateY(-50%);
+  -ms-transform: translateX(-50%) translateY(-50%);
+  transform: translateX(-50%) translateY(-50%);
+  padding: 8px 14px;
+  background-color: rgba(0, 0, 0, 0.6);
+  line-height: 1.5;
+  max-width: 60%;
+  border-radius: 4px;
+  color: #fff;
+  z-index: 99999;
+  font-size: 14px;
+`; // from .mhy-toast in https://act.hoyolab.com/ys/event/signin-sea-v3/index.html?act_id=e202102251931481
+// https://jsfiddle.net/Tq5m3/43
+function hint(msg = null, s = 1) {
+  modal.innerHTML = msg;
+  setTimeout(() => modal.remove(), s * 1000);
+  document.body.appendChild(modal);
 }
 
-addEventListener("keydown", (event) => {
+addEventListener("keydown", event => {
   if (event.key === 'Enter' && event.altKey) toggleFullscreen();
   else if (event.key == "F2") toggleContentEditable();
   else if (event.key == "F4") toggleUserSelect();
