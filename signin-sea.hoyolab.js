@@ -19,7 +19,7 @@
     !document.querySelector(`.mhy-toast`) ||
     document.querySelector(`.miss-num`).innerHTML == 0
   ) await new Promise(requestAnimationFrame);
-  ~function resignC() {
+  ~function resignClick() {
     if (document.querySelector(mend))
       document.querySelector(mend).click();
     if (document.querySelector(resign))
@@ -39,5 +39,5 @@
       taskBtn.click();
     }
   }(`.task-btn`);
-  resignC();
+  resignClick();
 }();
