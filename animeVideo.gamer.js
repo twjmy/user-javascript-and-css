@@ -56,12 +56,10 @@ function skip(event = null) {
 }
 let ifcancel = false;
 function esc() {
-  if (ifcancel) {
-    ifcancel = false;
-    return true;
-  } else return false;
+  if (ifcancel) return !(ifcancel = false);
+  else return false;
 }
-addEventListener('keyup', event => {
+addEventListener('keyup', async event => {
   if (!$('.danmu-text').is(':focus')) {
     // console.log(event.key);
     switch (event.key) {
@@ -83,20 +81,29 @@ addEventListener('keyup', event => {
           next();
         return;
       case 'n':
-        TOPBAR_show('light_1');
-        return;
+        return TOPBAR_show('light_1');
       case 'N':
-        next();
-        return;
+        return next();
       case 'P':
-        $('.vjs-pre-button').click();
         // console.log(`$('.vjs-pre-button').click();`);
-        return;
-      case `j`:
-        ani_video_html5_api.currentTime += 87;
-        return;
-      case `J`:
-        ani_video_html5_api.currentTime -= 90;
+        return $('.vjs-pre-button').click();
+      case `J`: case `j`:
+        const hintsq = `hotkey-hint-show`,
+          hintdq = event.shiftKey ?
+            `div.hotkey-hint-left` :
+            `div.hotkey-hint-right`,
+          hintd = document.querySelector(hintdq),
+          jump = event.shiftKey ? -90 : 87;
+        hintd.classList.remove(hintsq);
+        document.querySelector(hintdq + `>div`).innerHTML = `${Math.abs(jump)}s`;
+        hintd.classList.add(hintsq);
+        ani_video_html5_api.currentTime += jump;
+        hintd.endtime = Date.now() + 1e3;
+        while (Date.now() < hintd.endtime)
+          await new Promise(requestAnimationFrame);
+        await new Promise(resolve => setTimeout(resolve, 1e3));
+        document.querySelector(hintdq + `>div`).innerHTML = `5s`;
+        hintd.classList.remove(hintsq);
         return;
     }
   }
