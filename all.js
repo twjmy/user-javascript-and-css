@@ -27,9 +27,11 @@ function toggleUserSelect() {
   }
 }
 
-const modal = document.createElement("div");
-modal.setAttribute('class', 'modal');
+const modal = document.createElement(`div`);
+document.body.appendChild(modal);
+modal.classList.add(`modal`);
 modal.style.cssText = `
+  display: none;
   position: fixed;
   top: 50%;
   left: 50%;
@@ -46,10 +48,13 @@ modal.style.cssText = `
   font-size: 14px;
 `; // from .mhy-toast in https://act.hoyolab.com/ys/event/signin-sea-v3/index.html?act_id=e202102251931481
 // https://jsfiddle.net/Tq5m3/43
-function hint(msg = null, s = 1) {
+async function hint(msg = null, s = 1) {
   modal.innerHTML = msg;
-  setTimeout(() => modal.remove(), s * 1000);
-  document.body.appendChild(modal);
+  modal.style.display = `block`;
+  modal.endtime = Date.now() + s * 1e3;
+  while (Date.now() < modal.endtime)
+    await new Promise(requestAnimationFrame);
+  modal.style.display = `none`;
 }
 
 addEventListener("keydown", event => {
