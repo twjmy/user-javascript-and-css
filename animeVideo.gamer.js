@@ -31,16 +31,16 @@ async function next(s = 0) {
       next = a.href;
     }
   } else {
-    $('.vjs-next-button').click();
-    // console.log(`$('.vjs-next-button').click();`);
+    document.querySelector('.vjs-next-button').click();
+    // console.log(`document.querySelector('.vjs-next-button').click();`);
   }
 }
 function agree(event = null) {
   const qagree = `.choose-btn-agree`;
   if (document.querySelector(qagree)) {
     if (event) event.preventDefault();
-    $(qagree).click();
-    // console.log(`$(qagree).click();`);
+    document.querySelector(qagree).click();
+    // console.log(`document.querySelector(qagree).click();`);
   }
 }
 function skip(event = null) {
@@ -48,10 +48,10 @@ function skip(event = null) {
     nadskip = `.nativeAD-skip-button.enable`;
   if (document.querySelector(adskip)) {
     if (event) event.preventDefault();
-    $(adskip).click();
+    document.querySelector(adskip).click();
   } else if (document.querySelector(nadskip)) {
     if (event) event.preventDefault();
-    $(nadskip).click();
+    document.querySelector(nadskip).click();
   }
 }
 let ifcancel = false;
@@ -85,8 +85,8 @@ addEventListener('keyup', async event => {
       case 'N':
         return next();
       case 'P':
-        // console.log(`$('.vjs-pre-button').click();`);
-        return $('.vjs-pre-button').click();
+        // console.log(`document.querySelector('.vjs-pre-button').click();`);
+        return document.querySelector('.vjs-pre-button').click();
       case `J`: case `j`:
         const hintsq = `hotkey-hint-show`,
           hintdq = event.shiftKey ?
