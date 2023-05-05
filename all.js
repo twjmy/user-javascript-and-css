@@ -16,6 +16,7 @@ function toggleContentEditable() {
 const userSelect = document.createElement("style");
 userSelect.setAttribute('id', 'userSelect');
 userSelect.innerHTML = `*{user-select: text !important;}`;
+document.documentElement.appendChild(userSelect);
 
 function toggleUserSelect() {
   if (!document.querySelector(`#userSelect`)) {
