@@ -1,6 +1,6 @@
 const 倒計時_秒 = 5,
- cancel = () => ifcancel = true,
- sleep = (ms = 1e3) => new Promise(resolve => setTimeout(resolve, ms));
+  cancel = () => ifcancel = true,
+  sleep = (ms = 1e3) => new Promise(resolve => setTimeout(resolve, ms));
 let ifcancel = false, ended = false;
 async function next(s = 0) {
   if (ended && s > 0) return ended = true;
@@ -13,7 +13,7 @@ async function next(s = 0) {
       await new Promise(requestAnimationFrame);
     if (esc()) {
       danmutxt.placeholder = `已取消繼續播放`;
-      if(!document.querySelector(`.vjs-ended`)){
+      if (!document.querySelector(`.vjs-ended`)) {
         await sleep(3e3);
         danmutxt.placeholder = ``;
       }
@@ -31,7 +31,7 @@ async function next(s = 0) {
       if (a.href == document.URL) {
         if (!next) {
           danmutxt.placeholder = `👀這是最新的動畫了`;
-          if(!document.querySelector(`.vjs-ended`)){
+          if (!document.querySelector(`.vjs-ended`)) {
             await sleep(3e3);
             danmutxt.placeholder = ``;
           }
@@ -41,7 +41,7 @@ async function next(s = 0) {
       next = a.href;
     }
     danmutxt.placeholder = `⚠️找不到下一部最近更新的動畫`;
-    if(!document.querySelector(`.vjs-ended`)){
+    if (!document.querySelector(`.vjs-ended`)) {
       await sleep(3e3);
       danmutxt.placeholder = ``;
     }
@@ -68,7 +68,7 @@ addEventListener('keydown', event => {
     document.querySelector('.choose-btn-agree'))
   ) event.preventDefault();
   (event.key === `Escape` && !ifcancel) &&
-  event.preventDefault();
+    event.preventDefault();
 }, true);
 addEventListener('keyup', async event => {
   if (event.defaulPrevented) return;
@@ -77,7 +77,7 @@ addEventListener('keyup', async event => {
     document.activeElement == danmutxt ||
     document.activeElement == this[`anime-search-sky`]
   ) {
-    switch (event.key){
+    switch (event.key) {
       case `Escape`: event.preventDefault();
       case `Enter`:
         return ani_video_html5_api.focus({ focusVisible: true });
@@ -102,10 +102,10 @@ addEventListener('keyup', async event => {
             `div.hotkey-hint-left` :
             `div.hotkey-hint-right`,
           hintd = document.querySelector(hintdq),
-          jump = (event.key == `J` || event.key == `J`)?
-            (event.shiftKey ? -90 : 87): (
-            (event.key == `>`)? -30:
-            (event.shiftKey ? -30 : 29) );
+          jump = (event.key == `J` || event.key == `J`) ?
+            (event.shiftKey ? -90 : 87) : (
+              (event.key == `>`) ? -30 :
+                (event.shiftKey ? -30 : 29));
         hintd.classList.remove(hintsq);
         document.querySelector(hintdq + `>div`).innerHTML = `${Math.abs(jump)}s`;
         hintd.classList.add(hintsq);
@@ -137,11 +137,11 @@ TOPBAR_show('light_1');
   ani_video_html5_api.onended = () => next(倒計時_秒);
   // https://stackoverflow.com/a/57065599/13189986
   ani_video.addEventListener(`contextmenu`, event => {
-    event.returnValue = true; 
-    (typeof event.stopPropagation === 'function') && 
-    event.stopPropagation(); 
-    (typeof event.cancelBubble === 'function') && 
-    event.cancelBubble(); 
+    event.returnValue = true;
+    (typeof event.stopPropagation === 'function') &&
+      event.stopPropagation();
+    (typeof event.cancelBubble === 'function') &&
+      event.cancelBubble();
   }, true);
   searchsky.addEventListener(`click`, cancel, true);
   for (qagree = searchsky.placeholder; s > 0; s--) {
