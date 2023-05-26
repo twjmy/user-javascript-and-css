@@ -1,6 +1,11 @@
-const 倒計時_秒 = 5;
-const sleep = (ms = 1e3) => new Promise(resolve => setTimeout(resolve, ms));
+const 倒計時_秒 = 5,
+ cancel = () => ifcancel = true,
+ sleep = (ms = 1e3) => new Promise(resolve => setTimeout(resolve, ms));
+let ifcancel = false, ended = false;
 async function next(s = 0) {
+  if (ended && s > 0) return ended = true;
+  ended = true;
+  danmutxt.addEventListener(`click`, cancel, true);
   for (; s > 0; s--) {
     danmutxt.placeholder = `${s} 秒後播放下一集/訂閱的動畫...`;
     await sleep();
@@ -12,7 +17,7 @@ async function next(s = 0) {
         await sleep(3e3);
         danmutxt.placeholder = ``;
       }
-      return;
+      return ended = false;
     }
   }
   danmutxt.placeholder = `即將播放下一集/訂閱的動畫...`;
@@ -31,7 +36,7 @@ async function next(s = 0) {
             danmutxt.placeholder = ``;
           }
         } else open(next, "_self");
-        return;
+        return ended = false;
       }
       next = a.href;
     }
@@ -40,7 +45,7 @@ async function next(s = 0) {
       await sleep(3e3);
       danmutxt.placeholder = ``;
     }
-    return;
+    return ended = false;
   } else document.querySelector('.vjs-next-button').click();
 }
 function agree(event = null) {
@@ -50,7 +55,6 @@ function agree(event = null) {
     document.querySelector(qagree).click();
   }
 }
-let ifcancel = false;
 function esc() {
   if (ifcancel) {
     ifcancel = false;
@@ -63,42 +67,45 @@ addEventListener('keydown', event => {
     document.querySelector(`.vjs-ended`) ||
     document.querySelector('.choose-btn-agree'))
   ) event.preventDefault();
+  (event.key === `Escape` && !ifcancel) &&
+  event.preventDefault();
 }, true);
 addEventListener('keyup', async event => {
   if (event.defaulPrevented) return;
-  // https://stackoverflow.com/questions/17614844/javascript-jquery-detect-if-input-is-focused
-  // this === document.activeElement
-  if (!$('.danmu-text').is(':focus')) {
+  // https://stackoverflow.com/a/17614883/13189986
+  if (
+    document.activeElement == danmutxt ||
+    document.activeElement == this[`anime-search-sky`]
+  ) {
+    switch (event.key){
+      case `Escape`: event.preventDefault();
+      case `Enter`:
+        return ani_video_html5_api.focus({ focusVisible: true });
+    }
+  } else {
     switch (event.key) {
-      case 'Enter':
-        if (document.querySelector(`.vjs-playing`))
-          ani_video_html5_api.pause();
-        danmutxt.focus({ focusVisible: true });
-        return;
-      case 'Escape':
-        if (!ifcancel)
-          ifcancel = true;
-        return;
-      case ' ':
-        return agree(event);
+      case 'Escape': return ifcancel = true;
+      case 'Enter': return danmutxt.focus({ focusVisible: true });
+      case 'P': return document.querySelector('.vjs-pre-button').click();
+      case 'n': return TOPBAR_show('light_1');
+      case 'N': return next();
+      case ' ': return agree(event);
       case 'ArrowRight':
         if (document.querySelector(".vjs-ended")) {
           event.preventDefault();
-          return next();
+          next();
         }
-      case 'n':
-        return TOPBAR_show('light_1');
-      case 'N':
-        return next();
-      case 'P':
-        return document.querySelector('.vjs-pre-button').click();
-      case `J`: case `j`:
+        return;
+      case `J`: case `j`: case `.`: case `,`: case `>`:
         const hintsq = `hotkey-hint-show`,
           hintdq = event.shiftKey ?
             `div.hotkey-hint-left` :
             `div.hotkey-hint-right`,
           hintd = document.querySelector(hintdq),
-          jump = event.shiftKey ? -90 : 87;
+          jump = (event.key == `J` || event.key == `J`)?
+            (event.shiftKey ? -90 : 87): (
+            (event.key == `>`)? -30:
+            (event.shiftKey ? -30 : 29) );
         hintd.classList.remove(hintsq);
         document.querySelector(hintdq + `>div`).innerHTML = `${Math.abs(jump)}s`;
         hintd.classList.add(hintsq);
@@ -106,10 +113,8 @@ addEventListener('keyup', async event => {
         hintd.endtime = Date.now() + 1e3;
         while (Date.now() < hintd.endtime)
           await new Promise(requestAnimationFrame);
-        await new Promise(resolve => setTimeout(resolve, 1e3));
         document.querySelector(hintdq + `>div`).innerHTML = `5s`;
-        hintd.classList.remove(hintsq);
-        return;
+        return hintd.classList.remove(hintsq);
     }
   }
 }, true);
@@ -118,15 +123,27 @@ TOPBAR_show('light_1');
 TOPBAR_show('light_1');
 
 ~async function (
-  ended = `.vjs-ended`,
   error = `.vjs-error>.vjs-error-display>div`,
   qagree = `.choose-btn-agree`,
   fullscreen = `.vjs-fullscreen-control:not(.fullscreen-close)`,
-  searchsky = window[`anime-search-sky`],
+  searchsky = this[`anime-search-sky`],
   s = 倒計時_秒,
 ) {
   while (!document.querySelector(qagree))
     await new Promise(requestAnimationFrame);
+  document.querySelector(`.choose-btn-agree`).onclick
+    = ani_video_html5_api.onplaying = () => ani_video.requestFullscreen();
+  // ani_video_html5_api.onpause = () => document.exitFullscreen();
+  ani_video_html5_api.onended = () => next(倒計時_秒);
+  // https://stackoverflow.com/a/57065599/13189986
+  ani_video.addEventListener(`contextmenu`, event => {
+    event.returnValue = true; 
+    (typeof event.stopPropagation === 'function') && 
+    event.stopPropagation(); 
+    (typeof event.cancelBubble === 'function') && 
+    event.cancelBubble(); 
+  }, true);
+  searchsky.addEventListener(`click`, cancel, true);
   for (qagree = searchsky.placeholder; s > 0; s--) {
     searchsky.placeholder = `${s} 秒後播放動畫...`;
     await sleep();
@@ -144,27 +161,27 @@ TOPBAR_show('light_1');
     searchsky.placeholder = `即將播放動畫...`;
     agree();
     searchsky.placeholder = qagree;
-    ani_video.requestFullscreen();
+    // https://stackoverflow.com/a/8086091/13189986
+    // ani_video.requestFullscreen();
+    // document.querySelector(fullscreen).dispatchEvent(new MouseEvent(this.CLICK));
   }
-  while (!document.querySelector(ended)) {
+  while (!document.querySelector(error)) {
     await new Promise(requestAnimationFrame);
-    if (document.querySelector(ended)) { //no AD
-      next(倒計時_秒);
-      return;
-    } else if (document.querySelector(error)) {
+    if (document.querySelector(error)) {
       await sleep();
       const e = document.createElement(`div`);
       document.querySelector(error).appendChild(e);
+      e.addEventListener(`click`, cancel, true);
       for (s = 3; s > 0; s--) {
         await sleep();
         e.innerHTML = `${s} 秒後重新整理...`;
+        if (esc()) {
+          e.innerHTML = `已取消重新整理...`;
+          await sleep(3e3);
+          return e.remove();
+        }
       }
-      if (esc()) {
-        e.innerHTML = `已取消重新整理...`;
-        await sleep(3e3);
-        e.remove();
-        return;
-      } else location.reload();
+      location.reload();
     }
   }
 }();
