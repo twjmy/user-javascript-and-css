@@ -1,4 +1,4 @@
-let 倒計時_秒 = 5, ifcancel = false, ended = false;
+let 倒計時_秒 = 5, autoplays = 倒計時_秒, ifcancel = false, ended = false;
 const cancel = () => ifcancel = true;
 
 async function next(s = 0) {
@@ -84,6 +84,7 @@ addEventListener('keydown', event => {
 }, true);
 
 addEventListener('keyup', async event => {
+  // console.log(event.key,event.keyCode);
   if (event.defaulPrevented) return;
   // https://stackoverflow.com/a/17614883/13189986
   if (
@@ -99,13 +100,11 @@ addEventListener('keyup', async event => {
     switch (event.key) {
       case 'Escape': return cancel();
       case 'Enter': return danmutxt.focus({ focusVisible: true });
-      case 'p': case 'P':
-        if(event.shiftKey)
-          return document.querySelector('.vjs-pre-button').click();
-      case 'n': case 'N':
-        if(event.shiftKey) return next();
+      case 'P': return document.querySelector('.vjs-pre-button').click();
+      case 'n':
         document.querySelector('.anime_name>button').click();
         return TOPBAR_show('light_1');
+      case 'N': return next();
       case ' ': return agree(event);
       case 'ArrowRight':
         if (document.querySelector(".vjs-ended")) {
@@ -114,14 +113,15 @@ addEventListener('keyup', async event => {
         }
         return;
       case `J`: case `j`: case `.`: case `,`: case `>`:
-        const hintsq = `hotkey-hint-show`,
-          hintdq = event.shiftKey ?
-            `div.hotkey-hint-left` :
-            `div.hotkey-hint-right`,
-          hintd = document.querySelector(hintdq),
+        const 
           jump = (event.key == `j` || event.key == `J`)
             ? (event.shiftKey ? -90 : 87)
-            : ((event.key == `.`) ? 29 : -30);
+            : ((event.key == `.`) ? 29 : -30),
+          hintdq = jump < 0
+            ? `div.hotkey-hint-left`
+            : `div.hotkey-hint-right`,
+          hintsq = `hotkey-hint-show`,
+          hintd = document.querySelector(hintdq);
         hintd.classList.remove(hintsq);
         document.querySelector(hintdq + `>div`).innerHTML = `${Math.abs(jump)}s`;
         hintd.classList.add(hintsq);
@@ -139,7 +139,7 @@ addEventListener('keyup', async event => {
   error = `.vjs-error>.vjs-error-display>div`,
   qagree = `.choose-btn-agree`,
   fullscreen = `.vjs-fullscreen-control:not(.fullscreen-close)`,
-  s = 倒計時_秒,
+  s = autoplays,
 ) {
   while (!document.querySelector(qagree))
     await new Promise(requestAnimationFrame);
@@ -184,14 +184,15 @@ addEventListener('keyup', async event => {
   `;
   倒計時.value = 倒計時_秒;
   倒計時.oninput = () => {
-    倒計時_秒
+    倒計時_秒 = autoplays
       = Number(倒計時.value) === NaN ? 倒計時_秒
-      : Number(倒計時.value)
+      : Number(倒計時.value);
+    ++autoplays;
   };
   const autoplayd = document.createElement(`div`);
   tipd.appendChild(autoplayd);
-  for (ifcancel = false; s > 0; s--) {
-    autoplayd.innerHTML = `${s} 秒後播放動畫...`;
+  for (ifcancel = false; autoplays > 0; autoplays--) {
+    autoplayd.innerHTML = `${autoplays} 秒後播放動畫...`;
     const endtime = Date.now() + 1e3;
     while(Date.now() < endtime || !document.hasFocus())
       await new Promise(requestAnimationFrame);
@@ -200,11 +201,11 @@ addEventListener('keyup', async event => {
       while(tipd.matches(':hover'))
         await new Promise(requestAnimationFrame);
       document.body.removeChild(tipd);
-      s = `esc`;
+      autoplays = `esc`;
       break;
     }
   }
-  if (s != `esc`) {
+  if (autoplays != `esc`) {
     autoplayd.innerHTML = `正在播放動畫...`;
     agree();
     while(tipd.matches(':hover'))
