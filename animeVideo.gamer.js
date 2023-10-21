@@ -73,7 +73,7 @@ function esc() {
   } else return false;
 }
 
-addEventListener('keydown', event => {
+window.addEventListener('keydown', event => {
   if (event.defaulPrevented) return;
   if (event.key === ' ' && (
     document.querySelector(`.vjs-ended`) ||
@@ -83,13 +83,13 @@ addEventListener('keydown', event => {
     event.preventDefault();
 }, true);
 
-addEventListener('keyup', async event => {
+window.addEventListener('keyup', async event => {
   // console.log(event.key,event.keyCode);
   if (event.defaulPrevented) return;
   // https://stackoverflow.com/a/17614883/13189986
   if (
     document.activeElement == danmutxt ||
-    document.activeElement == this[`anime-search-sky`]
+    document.activeElement == window[`anime-search-sky`]
   ) {
     switch (event.key) {
       case `Escape`: event.preventDefault();
@@ -161,13 +161,11 @@ addEventListener('keyup', async event => {
     position: fixed;
     top: 10%;
     right: 0%;
-    -webkit-transform: translateX(-5%) translateY(-10%);
-    -ms-transform: translateX(-5%) translateY(-10%);
-    transform: translateX(-5%) translateY(-10%);
     padding: 8px 14px;
     background-color: rgba(0, 0, 0, 0.6);
     line-height: 1.5;
-    max-width: 60%;
+    width: fit-content;
+    min-width: fit-content;
     border-radius: 4px;
     color: #fff;
     z-index: 99999;
@@ -182,6 +180,26 @@ addEventListener('keyup', async event => {
     倒計時_秒=<input id="倒計時" type="number" min="0" maxlength="2"><br>
     按<button onclick="cancel()">Esc</button>取消自動播放
   `;
+  // EDITED form https://www.w3schools.com/howto/howto_js_draggable.asp
+  tipd.onmousedown = function dragMouseDown(e) {
+    e ||= window.event;
+    e.preventDefault();
+    // get mouse cursor position at startup:
+    var posx = e.clientX, posy = e.clientY;
+    document.onmouseup = function closeDragElement() {
+      // stop moving when mouse button is released:
+      document.onmouseup = document.onmousemove = null;
+    };
+    // call a function whenever cursor moves:
+    document.onmousemove = function elementDrag(e) {
+      e ||= window.event;
+      e.preventDefault();
+      // calculate new cursor position, set element's new position:
+      tipd.style.left = (tipd.offsetLeft - posx + e.clientX) + "px";
+      tipd.style.top = (tipd.offsetTop - posy + e.clientY) + "px";
+      posx = e.clientX, posy = e.clientY;
+    };
+  };
   倒計時.value = 倒計時_秒;
   倒計時.oninput = () => {
     倒計時_秒 = autoplays
@@ -193,12 +211,13 @@ addEventListener('keyup', async event => {
   tipd.appendChild(autoplayd);
   for (ifcancel = false; autoplays > 0; autoplays--) {
     autoplayd.innerHTML = `${autoplays} 秒後播放動畫...`;
-    const endtime = Date.now() + 1e3;
-    while(Date.now() < endtime || !document.hasFocus())
+    autoplayd.endtime = Date.now() + 1e3;
+    while(Date.now() < autoplayd.endtime || !document.hasFocus())
       await new Promise(requestAnimationFrame);
     if (esc()) {
       autoplayd.innerHTML = autoplaytip;
-      while(tipd.matches(':hover'))
+      autoplayd.endtime = Date.now() + 1e3;
+      while(Date.now() < autoplayd.endtime || tipd.matches(':hover'))
         await new Promise(requestAnimationFrame);
       document.body.removeChild(tipd);
       autoplays = `esc`;
@@ -208,7 +227,8 @@ addEventListener('keyup', async event => {
   if (autoplays != `esc`) {
     autoplayd.innerHTML = `正在播放動畫...`;
     agree();
-    while(tipd.matches(':hover'))
+    autoplayd.endtime = Date.now() + 1e3;
+    while(Date.now() < autoplayd.endtime || tipd.matches(':hover'))
       await new Promise(requestAnimationFrame);
     document.body.removeChild(tipd);
     // https://stackoverflow.com/a/8086091/13189986
@@ -220,21 +240,34 @@ addEventListener('keyup', async event => {
   while (!document.querySelector(error)) {
     await new Promise(requestAnimationFrame);
     if (document.querySelector(error)) {
-      let endtime = Date.now() + 1e3;
+      let endtime = Date.now() + 倒計時_秒 * 1e3;
       while(Date.now() < endtime)
         await new Promise(requestAnimationFrame);
       const e = document.createElement(`div`);
       document.querySelector(error).appendChild(e);
       e.addEventListener(`click`, cancel, true);
+      window.addEventListener('keyup', async event => {
+        if ( document.activeElement == window[`anime-search-sky`] ) {
+          switch (event.key) {
+            case `Escape`: return cancel();
+            case `Enter`: return;
+          }
+        } else switch (event.key) {
+          case ' ': return window.location.reload();
+          case 'Escape': return cancel();
+          case `Enter`:
+            return window[`anime-search-sky`].focus({focusVisible: true});
+        }
+      }, true);
       for (ifcancel = false, s = 倒計時_秒; s > 0; s--) {
-        endtime = Date.now() + 1e3;
-        while(Date.now() < endtime)
+        e.endtime = Date.now() + 1e3;
+        while(Date.now() < e.endtime)
           await new Promise(requestAnimationFrame);
         e.innerHTML = `${s} 秒後重新整理...`;
         if (esc()) {
           e.innerHTML = `已取消重新整理...`;
-          endtime = Date.now() + 倒計時_秒 * 1e3;
-          while(Date.now() < endtime)
+          e.endtime = Date.now() + 倒計時_秒 * 1e3;
+          while(Date.now() < e.endtime)
             await new Promise(requestAnimationFrame);
           return e.remove();
         }
