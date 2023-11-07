@@ -88,7 +88,7 @@ window.addEventListener('keyup', async event => {
   if (event.defaulPrevented) return;
   // https://stackoverflow.com/a/17614883/13189986
   if (
-    document.activeElement == danmutxt ||
+    document.activeElement == document.getElementById(`danmutxt`) ||
     document.activeElement == window[`anime-search-sky`]
   ) {
     switch (event.key) {
@@ -178,7 +178,7 @@ window.addEventListener('keyup', async event => {
     <button>Shift</button>+<button>P</button>/<button>N</button>=上一集/下一集<br>
     <button>␣</button>=同意年齡分級<br>
     倒計時_秒=<input id="倒計時" type="number" min="0" maxlength="2"><br>
-    按<button onclick="cancel()">Esc</button>取消自動播放
+    按<button>Esc</button><span onclick="cancel()">取消</span>自動<span onclick="agree(event)">播放</span>
   `;
   // EDITED form https://www.w3schools.com/howto/howto_js_draggable.asp
   tipd.onmousedown = function dragMouseDown(e) {
@@ -240,7 +240,7 @@ window.addEventListener('keyup', async event => {
   while (!document.querySelector(error)) {
     await new Promise(requestAnimationFrame);
     if (document.querySelector(error)) {
-      let endtime = Date.now() + 倒計時_秒 * 1e3;
+      let endtime = Date.now() + 2e3;
       while(Date.now() < endtime)
         await new Promise(requestAnimationFrame);
       const e = document.createElement(`div`);
@@ -266,7 +266,7 @@ window.addEventListener('keyup', async event => {
         e.innerHTML = `${s} 秒後重新整理...`;
         if (esc()) {
           e.innerHTML = `已取消重新整理...`;
-          e.endtime = Date.now() + 倒計時_秒 * 1e3;
+          e.endtime = Date.now() + 1e3;
           while(Date.now() < e.endtime)
             await new Promise(requestAnimationFrame);
           return e.remove();
