@@ -4,27 +4,30 @@ function toggleFullscreen() {
 }
 
 function toggleContentEditable() {
-  if (document.documentElement.contentEditable == 'inherit') {
-    document.documentElement.setAttribute('contenteditable', '');
-    hint('按下 F2 即可結束網頁編輯模式');
-  } else {
+  if (localStorage.getItem("contentEditable")) {
+    localStorage.removeItem("contentEditable");
     document.documentElement.contentEditable = 'inherit';
     hint('結束網頁編輯模式');
+  } else {
+    localStorage.setItem("contentEditable", "true");
+    document.documentElement.setAttribute('contenteditable', '');
+    hint('按下 F2 即可結束網頁編輯模式');
   }
 }
 
 const userSelect = document.createElement("style");
 userSelect.setAttribute('id', 'userSelect');
 userSelect.innerHTML = `*{user-select: text !important;}`;
-document.documentElement.appendChild(userSelect);
 
 function toggleUserSelect() {
-  if (!document.querySelector(`#userSelect`)) {
-    document.documentElement.appendChild(userSelect);
-    hint('按下 F4 即可結束網頁選取模式');
-  } else {
+  if (localStorage.getItem("userSelect")) {
+    localStorage.removeItem("userSelect");
     userSelect.remove();
     hint('結束網頁選取模式');
+  } else {
+    localStorage.setItem("userSelect", "true");
+    document.documentElement.appendChild(userSelect);
+    hint('按下 F4 即可結束網頁選取模式');
   }
 }
 
@@ -87,4 +90,14 @@ addEventListener("keydown", event => {
   else if (event.key == "F4") toggleUserSelect();
 });
 
-hint('按下 F4 即可結束網頁選取模式', 2);
+if (localStorage.getItem("contentEditable")) {
+  localStorage.setItem("contentEditable", "true");
+  document.documentElement.setAttribute('contenteditable', '');
+  hint('按下 F2 即可結束網頁編輯模式');
+}
+if (localStorage.getItem("userSelect")) {
+  localStorage.setItem("userSelect", "true");
+  document.documentElement.appendChild(userSelect);
+  hint('按下 F4 即可結束網頁選取模式');
+}
+// toggleUserSelect();
