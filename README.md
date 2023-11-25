@@ -4,13 +4,13 @@
 (我還不想看 Chrome 插件的文件><)
 
 ### [iLearning 3.0 1 位驗證碼](/lms2020.js)
-URL: https://lms2020.nchu.edu.tw  
+URL: `https://lms2020.nchu.edu.tw`  
 
 ### [【原神】每日自動簽到](/signin-sea.hoyolab.js)(需[打開頁面](https://act.hoyolab.com/ys/event/signin-sea-v3/index.html?act_id=e202102251931481))
-URL: https://act.hoyolab.com/ys/event/signin-sea-*  
+URL: `http*.hoyolab.com/, http*.hoyoverse.com/, http*.mihoyo.com/`  
 
 ### [巴哈姆特動漫瘋外掛](/animeVideo.gamer.js)和[自訂介面](/animeVideo.gamer.css)
-URL: https://ani.gamer.com.tw/animeVideo.php?sn=*  
+URL: `https://ani.gamer.com.tw/animeVideo.php?sn=*`  
 
 倒計時_秒(X) 預設為 5 可自行修改
 + 打開頁面倒數 X 秒自動播放動畫(Esc 取消)
@@ -20,7 +20,7 @@ URL: https://ani.gamer.com.tw/animeVideo.php?sn=*
 <kbd>N</kbd>=訂閱  
 [<kbd>Shift</kbd>+]<kbd>J</kbd>=快進87秒/倒退90秒  
 <kbd>Shift</kbd>+<kbd>P</kbd>/<kbd>N</kbd>=上一集/下一集  
-<kbd>␣</kbd>=同意年齡分級/跳過廣告(廣告中按下會讓畫面變黑並靜音)
+<kbd>␣</kbd>=同意年齡分級/~~跳過廣告~~(請買會員:D)
 
 ### [頁面編輯](/all.js)
 URL: *  

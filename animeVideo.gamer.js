@@ -44,12 +44,19 @@ async function next(s = 0) {
       next = a.href;
     }
     danmutxt.placeholder = `⚠️找不到下一部最近更新的動畫`;
-    if (!document.querySelector(`.vjs-ended`)) {
-      const endtime = Date.now() + 倒計時_秒 * 1e3;
+    const endtime = Date.now() + 2e3;
+    while(Date.now() < endtime)
+      await new Promise(requestAnimationFrame);
+    
+    for (s = 倒計時_秒; s > 0; s--) {
+      danmutxt.placeholder = `${s} 秒後嘗試跳轉下一頁...`;
+      let endtime = Date.now() + 1e3;
       while(Date.now() < endtime)
         await new Promise(requestAnimationFrame);
-      danmutxt.placeholder = ``;
     }
+    history.forward();
+    danmutxt.placeholder = `已嘗試跳轉下一頁`;
+    
     return ended = false;
   } else document.querySelector('.vjs-next-button').click();
 }
@@ -92,7 +99,7 @@ window.addEventListener('keyup', async event => {
     document.activeElement == window[`anime-search-sky`]
   ) {
     switch (event.key) {
-      case `Escape`: event.preventDefault();
+      case `Escape`: event.preventDefault(); return cancel();
       case `Enter`:
         return ani_video_html5_api.focus({ focusVisible: true });
     }
@@ -106,12 +113,17 @@ window.addEventListener('keyup', async event => {
         return TOPBAR_show('light_1');
       case 'N': return next();
       case ' ': return agree(event);
+      case 'ArrowLeft':
+        if (event.altKey) {
+          return history.back();
+        } else return;
       case 'ArrowRight':
-        if (document.querySelector(".vjs-ended")) {
+        if (event.altKey) {
+          return history.forward();
+        } else if (document.querySelector(".vjs-ended")) {
           event.preventDefault();
           next();
-        }
-        return;
+        } else return;
       case `J`: case `j`: case `.`: case `,`: case `>`:
         const 
           jump = (event.key == `j` || event.key == `J`)
