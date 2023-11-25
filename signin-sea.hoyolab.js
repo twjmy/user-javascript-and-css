@@ -9,6 +9,7 @@
   resign = blahc + `resign-modal-__index_---resign-btn---3oGNt6`,
   dialog = blahc + `common-dialog-__index_---sign-content---3PZVVu`,
 ) {
+  if (!location.pathname.includes(`signin`)) return;
   while (
     !document.querySelector(signWrapper) ||
     document.querySelector(icon).src.indexOf(`data:image`) == 0
@@ -40,4 +41,17 @@
     }
   }(`.task-btn`);
   resignClick();
+}();
+
+~async function(){
+  if (!location.pathname.includes(`news`)) return;
+	while(true){
+		const e = document.querySelector("li.news__more");
+		if (
+		  e && document.hasFocus() &&
+		  (e.innerHTML===`加载更多` || e.innerHTML===`加載更多`) &&
+		  (innerHeight + scrollY) >= document.body.scrollHeight-innerHeight
+		) e.click();
+		await new Promise(requestAnimationFrame);
+	}
 }();
