@@ -1,6 +1,4 @@
-let setSeconds = localStorage.getItem("autoplaySeconds") ?
-  localStorage.getItem("autoplaySeconds") : 5,
-  autoplays = setSeconds, ifcancel = false, ended = false;
+let ifcancel = false, ended = false;
 const cancel = () => ifcancel = true;
 
 async function next(s = 0) {
@@ -69,8 +67,10 @@ function agree(event = null) {
     if (event) event.preventDefault();
     document.querySelector(qagree).click();
     cancel();
-    if(event.key.toLowerCase() == `f`)
-      ani_video.requestFullscreen();
+    if(
+      localStorage.getItem(`autoFullscreen`) ? true : false ||
+      event && event.key.toLowerCase() == `f`
+    ) ani_video.requestFullscreen();
   }
 }
 
@@ -153,7 +153,8 @@ window.addEventListener('keyup', async event => {
   error = `.vjs-error>.vjs-error-display>div`,
   qagree = `.choose-btn-agree`,
   fullscreen = `.vjs-fullscreen-control:not(.fullscreen-close)`,
-  s = autoplays,
+  s = localStorage.getItem("seconds") ?
+    localStorage.getItem("seconds") : 5,
 ) {
   while (!document.querySelector(qagree))
     await new Promise(requestAnimationFrame);
@@ -193,8 +194,9 @@ window.addEventListener('keyup', async event => {
     <button>Shift</button>+<button>P</button>/<button>N</button>=上一集/下一集<br>
     <button>␣</button>=同意年齡分級<br>
     倒計時(秒)=<input id="inputSeconds" type="number" min="0" maxlength="2"><br>
+    自動全螢幕(需按鍵觸發) <input id="inputFull" type="checkbox"></input><br>
     <button onclick="cancel()">
-      按Esc取消自動播放 </button>
+      按Esc取消自動播放 </button><br>
   `;
   // EDITED form https://www.w3schools.com/howto/howto_js_draggable.asp
   tipd.onmousedown = function dragMouseDown(e) {
@@ -216,44 +218,51 @@ window.addEventListener('keyup', async event => {
       posx = e.clientX, posy = e.clientY;
     };
   };
+  let setSeconds = s;
   inputSeconds.value = setSeconds;
   inputSeconds.onmousedown = () => tipd.onmouseup = tipd.onmousemove = null;
   inputSeconds.oninput = () => {
-    localStorage.setItem("autoplaySeconds",
-      setSeconds = autoplays
+    localStorage.setItem("seconds",
+      setSeconds = s
         = Number(inputSeconds.value) === NaN ? setSeconds
         : Number(inputSeconds.value)
     );
-    ++autoplays;
+    ++s;
   };
+  inputFull.checked = localStorage.getItem(`autoFullscreen`)?true:false;
+  inputFull.onchange = () => inputFull.checked ?
+    localStorage.setItem(`autoFullscreen`, true):
+    localStorage.removeItem(`autoFullscreen`);
   const autoplayd = document.createElement(`div`);
+  autoplayd.style.cursor = `pointer`;
+  autoplayd.onclick = () => document.body.removeChild(tipd);
   tipd.appendChild(autoplayd);
-  for (ifcancel = false; autoplays > 0; autoplays--) {
-    autoplayd.innerHTML = `${autoplays} 秒後播放動畫...`;
+  for (ifcancel = false; s > 0; s--) {
+    autoplayd.innerHTML = `${s} 秒後播放動畫...`;
     autoplayd.endtime = Date.now() + 1e3;
     while(Date.now() < autoplayd.endtime || !document.hasFocus())
       await new Promise(requestAnimationFrame);
     if (esc()) {
-      autoplayd.innerHTML = `已取消自動播放動畫`;
+      autoplayd.innerHTML = document.querySelector(`.video-adHandler-background-blocker`)?
+        `正在播放動畫...`:
+        `已取消自動播放動畫`;
       autoplayd.endtime = Date.now() + 1e3;
       while(Date.now() < autoplayd.endtime)
         await new Promise(requestAnimationFrame);
       autoplayd.innerHTML = `❌`;
-      autoplayd.style.cursor = `pointer`;
-      autoplayd.onclick = () => document.body.removeChild(tipd);
-      autoplays = `esc`;
+      if(!tipd.matches(':hover'))
+        document.body.removeChild(tipd);
+      s = `esc`;
       break;
     }
   }
-  if (autoplays != `esc`) {
+  if (s != `esc`) {
     autoplayd.innerHTML = `正在播放動畫...`;
     agree();
     autoplayd.endtime = Date.now() + 1e3;
     while(Date.now() < autoplayd.endtime)
       await new Promise(requestAnimationFrame);
     autoplayd.innerHTML = `❌`;
-    autoplayd.style.cursor = `pointer`;
-    autoplayd.onclick = () => document.body.removeChild(tipd);
     if(!tipd.matches(':hover'))
       document.body.removeChild(tipd);
     // https://stackoverflow.com/a/8086091/13189986
