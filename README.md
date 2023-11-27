@@ -6,7 +6,7 @@
 ### [iLearning 3.0 1 位驗證碼](/lms2020.js)
 URL: `https://lms2020.nchu.edu.tw`  
 
-### [【原神】每日自動簽到](/signin-sea.hoyolab.js)(需[打開頁面](https://act.hoyolab.com/ys/event/signin-sea-v3/index.html?act_id=e202102251931481))
+### [【原神】每日自動簽到](/hoyo.js)(需[打開頁面](https://act.hoyolab.com/ys/event/signin-sea-v3/index.html?act_id=e202102251931481))
 URL: `http*.hoyolab.com/, http*.hoyoverse.com/, http*.mihoyo.com/`  
 
 ### [巴哈姆特動漫瘋外掛](/animeVideo.gamer.js)和[自訂介面](/animeVideo.gamer.css)
