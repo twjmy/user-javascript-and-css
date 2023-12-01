@@ -81,8 +81,11 @@ function esc() {
   } else return false;
 }
 
+let keyDown = {};
 window.addEventListener('keydown', event => {
   if (event.defaulPrevented) return;
+  if (typeof keyDown[event.key] !== 'number')
+    keyDown[event.key] = Date.now();
   if (event.key === ' ' && (
     document.querySelector(`.vjs-ended`) ||
     document.querySelector('.choose-btn-agree'))
@@ -124,17 +127,21 @@ window.addEventListener('keyup', async event => {
         } else if (document.querySelector(".vjs-ended")) {
           event.preventDefault();
           next();
-        } else return;
+        } else return agree(event);
       case `j`: case `.`: case `,`: case `>`:
         const 
-          jump = event.key == `j`?
-            (event.shiftKey ? -90 : 87):
-            (event.key == `.` ? 29 : -30),
+          jump = event.key.toLowerCase() == `j`? (
+            event.shiftKey? -90 : 87): (
+              event.key != `.`? -30: (
+                Date.now()-keyDown[`.`] > 1e3? 87 : 29
+              )
+            ),
           hintsq = `hotkey-hint-show`,
           hintd = document.querySelector(jump < 0 ?
             `div.hotkey-hint-left`:
             `div.hotkey-hint-right`
           );
+        keyDown = {};
         hintd.classList.remove(hintsq);
         hintd.firstElementChild.innerHTML
           = `${Math.abs(jump)}s`;
@@ -144,7 +151,9 @@ window.addEventListener('keyup', async event => {
         while (Date.now() < hintd.endtime)
           await new Promise(requestAnimationFrame);
         hintd.firstElementChild.innerHTML = `5s`;
-        return hintd.classList.remove(hintsq);
+        return !event.shiftKey&& event.key.toLowerCase() !== `,`&&
+          document.querySelector(".vjs-ended")?
+          next() : hintd.classList.remove(hintsq);
     }
   }
 }, true);
