@@ -9,6 +9,22 @@
   resign = blahc + `resign-modal-__index_---resign-btn---3oGNt6`,
   dialog = blahc + `common-dialog-__index_---sign-content---3PZVVu`,
 ) {
+  new FontFace(
+      `ys`,
+      `url(https://act.hoyoverse.com/ys/event/survey-collection/fonts/default.4b9a2491.ttf)`
+    ).load().then(
+      loadedFont=>document.fonts.add(loadedFont)
+    ).catch(
+      error=>console.log(error)
+    );
+  new FontFace(
+      `ysFont`,
+      `url(https://act.hoyoverse.com/ys/event/survey-collection/fonts/default.4b9a2491.ttf)`
+    ).load().then(
+      loadedFont=>document.fonts.add(loadedFont)
+    ).catch(
+      error=>console.log(error)
+    );
   if (!location.pathname.includes(`signin`)) return;
   while (
     !document.querySelector(signWrapper) ||

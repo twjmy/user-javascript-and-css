@@ -47,7 +47,7 @@ hintd.style.cssText = `
   max-width: 60%;
   border-radius: 4px;
   color: #fff;
-  z-index: 99999;
+  z-index: 2147483647;
   font-size: 14px;
   cursor: move;
 `;
@@ -103,6 +103,7 @@ if (localStorage.getItem("userSelect")) {
 }
 // toggleUserSelect();
 
+// delete code bottom if you don't need AD block
 const select = query => document.querySelector(query);
 if (location.href.includes(`genshin.honeyhunterworld.com/`)){
   ~async function(){
@@ -140,13 +141,22 @@ if (location.href.includes(`genshin.honeyhunterworld.com/`)){
       await new Promise(requestAnimationFrame);
     select(`#ad-genshin-anchor`).remove();
   }();
-}
-
-if (location.href.includes(`outlook.live.com/`)){
+} else if (location.href.includes(`outlook.live.com/`)) {
   ~async function(){
     while (!select(`.GssDD`))
       await new Promise(requestAnimationFrame);
-    select(`.GssDD`).remove();
-    select(`.GssDD`).remove();
+    while (!select(`.GssDD`)){
+      select(`.GssDD`).remove();
+      await new Promise(requestAnimationFrame);
+    }
+  }();
+} else  if (location.href.includes(`ambr.top/`)) {
+  ~async function(){
+    while (!select(`[name="Advertisment"]`))
+      await new Promise(requestAnimationFrame);
+    while (select(`[name="Advertisment"]`)){
+      select(`[name="Advertisment"]`).remove();
+      await new Promise(requestAnimationFrame);
+    }
   }();
 }

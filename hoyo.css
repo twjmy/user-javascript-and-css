@@ -1,4 +1,4 @@
-@font-face {
+/*@font-face {
 	font-family: ysFont;
 	font-display: swap;
 	src: url(https://act.hoyoverse.com/ys/event/survey-collection/fonts/default.4b9a2491.ttf)
@@ -7,7 +7,7 @@
 	font-family: ys;
 	font-display: swap;
 	src: url(https://act.hoyoverse.com/ys/event/survey-collection/fonts/default.4b9a2491.ttf)
-}
+}*/
 .location-name,
 *:not([class*=icon]),
 [mi18n-lang=zh-cn] *:not([class*=icon]),

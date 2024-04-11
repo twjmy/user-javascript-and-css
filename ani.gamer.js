@@ -23,6 +23,10 @@ async function next(s = 0) {
       return ended = false;
     }
   }
+
+  // danmutxt.placeholder = `嘗試跳轉下一頁`;
+  // history.forward();
+
   danmutxt.placeholder = `即將播放下一集/訂閱的動畫...`;
   let next = '';
   if (document.querySelector(".vjs-next-button.vjs-hidden")) {
@@ -32,13 +36,14 @@ async function next(s = 0) {
       > a[data-gtm-notification="ani"]
     `)) {
       if (a.href == document.URL) {
-        if (!next) {
+        if (next) open(next, "_self");
+        else {
           danmutxt.placeholder = `哈哈被騙了吧？沒有最新的動畫囉！`;
           const endtime = Date.now() + setSeconds * 1e3;
           while(Date.now() < endtime)
             await new Promise(requestAnimationFrame);
           danmutxt.placeholder = ``;
-        } else open(next, "_self");
+        }
         return ended = false;
       }
       next = a.href;
@@ -58,19 +63,15 @@ async function next(s = 0) {
     danmutxt.placeholder = `已嘗試跳轉下一頁`;
     
     return ended = false;
-  } else document.querySelector('.vjs-next-button').click();
-}
-
-function agree(event = null) {
-  const qagree = `.choose-btn-agree`;
-  if (document.querySelector(qagree)) {
-    if (event) event.preventDefault();
-    document.querySelector(qagree).click();
-    cancel();
-    if(
-      localStorage.getItem(`autoFullscreen`) ? true : false ||
-      event && event.key.toLowerCase() == `f`
-    ) ani_video.requestFullscreen();
+  } else {
+    document.querySelector('.vjs-next-button').click();
+    while (!document.querySelector(`.choose-btn-agree`))
+      await new Promise(requestAnimationFrame);
+    agree();
+    const endtime = Date.now() + 2e3;
+    while(Date.now() < endtime)
+      await new Promise(requestAnimationFrame);
+    ani_video_html5_api.addEventListener(`ended`, () => next(setSeconds), true);
   }
 }
 
@@ -112,10 +113,11 @@ window.addEventListener('keyup', async event => {
       case 'escape': return cancel();
       case 'enter': return danmutxt.focus({ focusVisible: true });
       case 'p': return event.shiftKey ? 
-        document.querySelector('.vjs-pre-button').click():null;
+        document.querySelector('.vjs-pre-button').click() :
+        document.querySelector('.anime_name>button').click();
       case 'n':
-        return event.shiftKey ? next() :
-          document.querySelector('.anime_name>button').click();
+        return event.shiftKey ?
+          next() : TOPBAR_show('light_1');
       case ' ': case 'f': return agree(event);
       case 'arrowleft':
         if (event.altKey) {
@@ -127,6 +129,7 @@ window.addEventListener('keyup', async event => {
         } else if (document.querySelector(".vjs-ended")) {
           event.preventDefault();
           next();
+          return;
         } else return agree(event);
       case `j`: case `.`: case `,`: case `>`:
         const 
@@ -158,6 +161,22 @@ window.addEventListener('keyup', async event => {
   }
 }, true);
 
+function agree(event = null) {
+  const qagree = `.choose-btn-agree`;
+  if (document.querySelector(qagree)) {
+    if (event) event.preventDefault();
+    document.querySelector(qagree).click();
+    cancel();
+    if(
+      localStorage.getItem(`autoFullscreen`) ? true : false ||
+      event && event.key.toLowerCase() == `f`
+    ) {
+      // ani_video.requestFullscreen();
+      document.querySelector(`.vjs-button.vjs-fullscreen-control`).click();
+    }
+  }
+}
+
 ~async function (
   error = `.vjs-error>.vjs-error-display>div`,
   qagree = `.choose-btn-agree`,
@@ -167,10 +186,11 @@ window.addEventListener('keyup', async event => {
 ) {
   while (!document.querySelector(qagree))
     await new Promise(requestAnimationFrame);
-  document.querySelector(`.choose-btn-agree`).onclick
-    = ani_video_html5_api.onplaying = () => agree();
-  // ani_video_html5_api.onpause = () => document.exitFullscreen();
-  ani_video_html5_api.onended = () => next(setSeconds);
+  document.querySelector(`.choose-btn-agree`)
+    .addEventListener("click", () => agree(), true);
+  ani_video_html5_api.addEventListener(`playing`, () => agree(), true);
+  // ani_video_html5_api.addEventListener(`pause`, () => document.exitFullscreen()), true);
+  ani_video_html5_api.addEventListener(`ended`, () => next(setSeconds), true);
   // https://stackoverflow.com/a/57065599/13189986
   ani_video.addEventListener(`contextmenu`, event => {
     event.returnValue = true;
@@ -204,6 +224,7 @@ window.addEventListener('keyup', async event => {
     <button>␣</button>=同意年齡分級<br>
     倒計時(秒)=<input id="inputSeconds" type="number" min="0" maxlength="2"><br>
     自動全螢幕(需按鍵觸發) <input id="inputFull" type="checkbox"></input><br>
+    自動播放 <input id="inputAutoplay" type="checkbox"></input><br>
     <button onclick="cancel()">
       按Esc取消自動播放 </button><br>
   `;
@@ -238,23 +259,34 @@ window.addEventListener('keyup', async event => {
     );
     ++s;
   };
+
   inputFull.checked = localStorage.getItem(`autoFullscreen`)?true:false;
   inputFull.onchange = () => inputFull.checked ?
     localStorage.setItem(`autoFullscreen`, true):
     localStorage.removeItem(`autoFullscreen`);
+
+  inputAutoplay.checked = localStorage.getItem(`autoplay`)?true:false;
+  inputAutoplay.onchange = () => inputAutoplay.checked ?
+    localStorage.setItem(`autoplay`, true):
+    localStorage.removeItem(`autoplay`);
+
   const autoplayd = document.createElement(`div`);
   autoplayd.style.cursor = `pointer`;
   autoplayd.onclick = () => document.body.removeChild(tipd);
   tipd.appendChild(autoplayd);
-  for (ifcancel = false; s > 0; s--) {
+  if (!localStorage.getItem(`autoplay`)) {
+    s = `esc`;
+    autoplayd.innerHTML = `❌`;
+  }
+  else for (ifcancel = false; s > 0; s--) {
     autoplayd.innerHTML = `${s} 秒後播放動畫...`;
     autoplayd.endtime = Date.now() + 1e3;
     while(Date.now() < autoplayd.endtime || !document.hasFocus())
       await new Promise(requestAnimationFrame);
-    if (esc()) {
-      autoplayd.innerHTML = document.querySelector(`.video-adHandler-background-blocker`)?
-        `正在播放動畫...`:
-        `已取消自動播放動畫`;
+    if (esc() || !localStorage.getItem(`autoplay`)) {
+      autoplayd.innerHTML = document.querySelector(`.choose-btn-agree`)?
+        `已取消自動播放動畫`:
+        `正在播放動畫...`;
       autoplayd.endtime = Date.now() + 1e3;
       while(Date.now() < autoplayd.endtime)
         await new Promise(requestAnimationFrame);
@@ -275,47 +307,45 @@ window.addEventListener('keyup', async event => {
     if(!tipd.matches(':hover'))
       document.body.removeChild(tipd);
     // https://stackoverflow.com/a/8086091/13189986
-    // ani_video.requestFullscreen();
+    // // ani_video.requestFullscreen();
+    // document.querySelector(`.vjs-button.vjs-fullscreen-control`).click();
     // document.querySelector(fullscreen).dispatchEvent(new MouseEvent(this.CLICK));
   }
   TOPBAR_show('light_1');
   TOPBAR_show('light_1');
-  while (!document.querySelector(error)) {
+  while (!document.querySelector(error))
     await new Promise(requestAnimationFrame);
-    if (document.querySelector(error)) {
-      let endtime = Date.now() + 2e3;
-      while(Date.now() < endtime)
-        await new Promise(requestAnimationFrame);
-      const e = document.createElement(`div`);
-      document.querySelector(error).appendChild(e);
-      e.addEventListener(`click`, cancel, true);
-      window.addEventListener('keyup', async event => {
-        if ( document.activeElement == window[`anime-search-sky`] ) {
-          switch (event.key) {
-            case `Escape`: return cancel();
-            case `Enter`: return;
-          }
-        } else switch (event.key) {
-          case ' ': return window.location.reload();
-          case 'Escape': return cancel();
-          case `Enter`:
-            return window[`anime-search-sky`].focus({focusVisible: true});
-        }
-      }, true);
-      for (ifcancel = false, s = setSeconds; s > 0; s--) {
-        e.endtime = Date.now() + 1e3;
-        while(Date.now() < e.endtime)
-          await new Promise(requestAnimationFrame);
-        e.innerHTML = `${s} 秒後重新整理...`;
-        if (esc()) {
-          e.innerHTML = `已取消重新整理...`;
-          e.endtime = Date.now() + 1e3;
-          while(Date.now() < e.endtime)
-            await new Promise(requestAnimationFrame);
-          return e.remove();
-        }
+  let endtime = Date.now() + 2e3;
+  while(Date.now() < endtime)
+    await new Promise(requestAnimationFrame);
+  const e = document.createElement(`div`);
+  document.querySelector(error).appendChild(e);
+  e.addEventListener(`click`, cancel, true);
+  window.addEventListener('keyup', async event => {
+    if ( document.activeElement == window[`anime-search-sky`] ) {
+      switch (event.key) {
+        case `Escape`: return cancel();
+        case `Enter`: return;
       }
-      location.reload();
+    } else switch (event.key) {
+      case ' ': return window.location.reload();
+      case 'Escape': return cancel();
+      case `Enter`:
+        return window[`anime-search-sky`].focus({focusVisible: true});
+    }
+  }, true);
+  for (ifcancel = false, s = setSeconds; s > 0; s--) {
+    e.endtime = Date.now() + 1e3;
+    while(Date.now() < e.endtime)
+      await new Promise(requestAnimationFrame);
+    e.innerHTML = `${s} 秒後重新整理...`;
+    if (esc()) {
+      e.innerHTML = `已取消重新整理...`;
+      e.endtime = Date.now() + 1e3;
+      while(Date.now() < e.endtime)
+        await new Promise(requestAnimationFrame);
+      return e.remove();
     }
   }
+  location.reload();
 }();

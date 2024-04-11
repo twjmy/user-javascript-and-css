@@ -2,123 +2,101 @@
 #egg_mask,
 #egg_box,
 #not-adult {
-  display: none;
+    display: none;
 }
-
 #adult {
-  color: transparent;
-  display: inline-block !important;
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  border: unset;
-  margin: unset;
+    color: transparent;
+    display: inline-block!important;
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: unset;
+    margin: unset;
 }
-
 .top_sky.fullwindow-unlock.fullwindow {
-  height: 95px;
+    height: 95px;
 }
-
 .top_sky.fullwindow-unlock.fullwindow:hover {
-  transform: unset;
+    transform: unset;
 }
-
 .subtitle.vjs-hidden {
-  display: block !important;
-  background: transparent;
-  border: unset;
-  z-index: 99;
-  width: 1px;
-  right: 0;
-  left: unset;
+    display: block!important;
+    background: transparent;
+    border: unset;
+    z-index: 99;
+    width: 1px;
+    right: 0;
+    left: unset;
 }
-
 #adSkipButton,
 .video-google-AD {
-  z-index: 100 !important;
+    z-index: 100!important;
 }
-
-.nativeAD-skip-button {
-  z-index: 101 !important;
+.nativeAD-skip-button{
+    z-index: 101!important;
 }
-
 .subtitle.vjs-hidden:hover {
-  background: var(--card-bg);
-  width: 25.5%;
-}
-
-@media screen and (max-width: 999.9px) {
-
-  .subtitle.vjs-hidden,
-  .subtitle.vjs-hidden:hover {
     background: var(--card-bg);
-    width: 100%;
-  }
+    width: 25.5%;
 }
-
+@media screen and (max-width: 999.9px) {
+    .subtitle.vjs-hidden,
+    .subtitle.vjs-hidden:hover {
+        background: var(--card-bg);
+        width: 100%;
+    }
+}
 .BH_background .container-player .player .videoframe .video #video-container .video-js .vjs-control-bar {
-  display: flex;
-  /*     z-index: 100; */
+    display: flex;
+/*     z-index: 100; */
 }
-
 #ani_video:not(.vjs-has-started) #ani_video_html5_api {
-  z-index: 10;
+    z-index: 10;
 }
-
 #ani_video:not(.vjs-has-started) .vjs-control-bar {
-  display: none !important;
+    display: none!important;
 }
-
 .ncc-choosebar {
-  width: 0 !important;
+    width: 0!important;
 }
-
 .ncc-choosearea {
-  justify-content: flex-start !important;
-  align-items: flex-start !important;
+    justify-content: flex-start!important;
+	align-items: flex-start!important;
 }
-
-.ncc-choosearea img {
-  visibility: hidden;
+.ncc-choosearea img{
+    visibility: hidden;
 }
-
 .video-cover-ncc {
-  color: transparent;
+    color: transparent;
 }
-
 .anime-quiz {
-  background: #5555;
-  top: 16% !important;
+    background: #5555;
+    top: 16%!important;
 }
-
 .video-login-wrapper,
 .R18 {
-  background: transparent;
-  align-items: flex-end !important;
+    background: transparent;
+    align-items: flex-end!important;
 }
-
 .R18 .video-cover-ncc .ncc-choosearea .ncc-choosebar .ncc-choose-btn button:hover {
-  background: unset;
+    background: unset;
 }
-
 .R18 .video-cover-ncc,
 .ncc-choosearea {
-  height: 100%;
+    height: 100%;
 }
-
 /* width */
 ::-webkit-scrollbar {
-  width: 1px;
+    width: 1px;
 }
-
 /* Handle on hover */
 /* ::-webkit-scrollbar-thumb:hover {
   background: #555; 
 } */
 @media (prefers-color-scheme: dark) {
-  /* Handle on hover */
-  /*     ::-webkit-scrollbar-thumb:hover {
+    /* Handle on hover */
+    /*     ::-webkit-scrollbar-thumb:hover {
       background: #555; 
     } */
 }
