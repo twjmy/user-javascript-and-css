@@ -53,7 +53,8 @@ async function next(s = 0) {
     while(Date.now() < endtime)
       await new Promise(requestAnimationFrame);
     
-    for (s = setSeconds; s > 0; s--) {
+    for (s = localStorage.getItem("seconds") ?
+     localStorage.getItem("seconds") : 5; s > 0; s--) {
       danmutxt.placeholder = `${s} 秒後嘗試跳轉下一頁...`;
       let endtime = Date.now() + 1e3;
       while(Date.now() < endtime)
