@@ -173,7 +173,7 @@ function agree(event = null) {
       event && event.key.toLowerCase() == `f`
     ) {
       // ani_video.requestFullscreen();
-      document.querySelector(`.vjs-button.vjs-fullscreen-control`).click();
+      document.querySelector(`.vjs-fullscreen-control:not(.fullscreen-close)`).click();
     }
   }
 }

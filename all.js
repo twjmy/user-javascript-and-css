@@ -103,9 +103,16 @@ if (localStorage.getItem("userSelect")) {
 }
 // toggleUserSelect();
 
+~async function(){
+  window.alert = message => {
+    hint(message, 2);
+    console.log(message);
+  }
+}();
+
 // delete code bottom if you don't need AD block
 const select = query => document.querySelector(query);
-if (location.href.includes(`genshin.honeyhunterworld.com/`)){
+if (location.href.includes(`honeyhunterworld.com/`)){
   ~async function(){
     while (!select(`.ad_sidebar_video`))
       await new Promise(requestAnimationFrame);
@@ -159,4 +166,36 @@ if (location.href.includes(`genshin.honeyhunterworld.com/`)){
       await new Promise(requestAnimationFrame);
     }
   }();
+} else  if (location.href.includes(`login.beanfun.com/`)) {
+  const p=new URLSearchParams(location.search)
+  if(p.get(`display_mode`) && p.get(`display_mode`)!=`4`){
+    p.set(`display_mode`, 4);
+    open(location.origin+location.pathname+`?`+p, `_self`)
+  }
 }
+// 《新楓之谷》x《為美好的世界獻上祝福！》合作活動
+~async function(){
+  const MSTWxKonoSuba3url = 'https://tw-event.beanfun.com/maplestory/event/E20240410/login.aspx';
+  if (location.href==MSTWxKonoSuba3url) return;
+  var day = new Date();
+  day.setHours(5);
+  day.setMinutes(3);
+  day.setSeconds(30);
+  if(new Date()>day) day.setDate(day.getDate()+1);
+  console.log(`將在以下時間開啟《新楓之谷》x《為美好的世界獻上祝福！》合作活動頁面`)
+  console.log(day);
+  
+  setTimeout(function() {
+    // https://stackoverflow.com/a/25937500/13189986
+    const tab = window.open(MSTWxKonoSuba3url, '_blank');
+    
+    // https://stackoverflow.com/a/43291970/13189986
+    tab.localStorage.openpages = Date.now();
+    tab.addEventListener('storage', e => {
+        if(e.key == "openpages")
+            tab.localStorage.page_available = Date.now();
+        else if(e.key == "page_available")
+            tab.close();
+    }, false);
+  }, day.getTime() - Date.now());
+}();
