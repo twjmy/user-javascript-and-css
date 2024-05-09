@@ -25,7 +25,18 @@ URL: `https://ani.gamer.com.tw/animeVideo.php?sn=*`
 <kbd>␣</kbd>=同意年齡分級/~~跳過廣告~~(請買會員:D)
 
 ### [頁面編輯](/all.js)
-URL: *  
-<kbd>Alt</kbd>+<kbd>Enter</kbd>=全螢幕模式  
-<kbd>F2</kbd>=切換`contenteditable`  
-<kbd>F4</kbd>=`userSelect='text'`
+URL: `*`  
+1. <kbd>Alt</kbd>+<kbd>Enter</kbd>=全螢幕模式  
+2. <kbd>F2</kbd>=切換`contenteditable`  
+3. <kbd>F4</kbd>=切換`userSelect='text'`
+4. 每天 5:3:30 自動打開 [《新楓之谷》x《為美好的世界獻上祝福！》合作活動頁面
+
+### [《新楓之谷》x《為美好的世界獻上祝福！》合作活動](/TMSxKonoSuba3.js)
+URL: `https://tw-event.beanfun.com/maplestory/event/E20240410/Index.aspx`
+登入後自動3抽
+
+### [anime1](/anime1.js)
+URL: `anime1.*/`
+1. Chrome自動適應系統深色淺色模式
+2. (實驗性)方向左右鍵快進快退少5秒
+3. (開發中)自動下一集
