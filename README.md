@@ -19,7 +19,7 @@ URL: `https://ani.gamer.com.tw/animeVideo.php?sn=*`
 <kbd>␣</kbd>=同意年齡分級/~~跳過廣告~~(請買會員:D)
 
 ### [頁面編輯](/all.js)
-URL: `*`  
+URL: `https://*/*`  
 1. <kbd>Alt</kbd>+<kbd>Enter</kbd>=全螢幕模式  
 2. <kbd>F2</kbd>=切換`contenteditable`  
 3. <kbd>F4</kbd>=切換`userSelect='text'`

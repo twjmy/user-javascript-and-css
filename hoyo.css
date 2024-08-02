@@ -8,12 +8,7 @@
 	font-display: swap;
 	src: url(https://act.hoyoverse.com/ys/event/survey-collection/fonts/default.4b9a2491.ttf)
 }*/
-.location-name,
-*:not([class*=icon]),
-[mi18n-lang=zh-cn] *:not([class*=icon]),
-[mi18n-lang=zh-tw] *:not([class*=icon]){
-    font-family: ys,ysFont,Microsoft YaHei,Neuropolitical,sans-serif!important;
-}
+
 .hyl-group-b[data-route-name$=newArticle-view_type] .article-menu-fix-layout {
 	transform: translateX(-280px);
 	width: 280px;
