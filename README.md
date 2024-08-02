@@ -1,13 +1,7 @@
 # [User JavaScript and CSS(Chrome extension)](https://chrome.google.com/webstore/detail/user-javascript-and-css/nbhcbdghjpllgmfilhnhkllmkecfmpld)
 網頁自訂 JavaScript, CSS by VJ  
-小技巧: 插件的自訂標題(Name)可用HTML  
+小技巧: ~~插件的自訂標題(Name)可用HTML~~ v10已取消  
 (我還不想看 Chrome 插件的文件><)
-
-### [iLearning 3.0 1 位驗證碼](/lms2020.js)
-URL: `https://lms2020.nchu.edu.tw`  
-
-### [【原神】每日自動簽到](/hoyo.js)(需[打開頁面](https://act.hoyolab.com/ys/event/signin-sea-v3/index.html?act_id=e202102251931481))
-URL: `http*.hoyolab.com/, http*.hoyoverse.com/, http*.mihoyo.com/`  
 
 ### [巴哈姆特動漫瘋外掛](/ani.gamer.js)和[自訂介面](/ani.gamer.css)
 URL: `https://ani.gamer.com.tw/animeVideo.php?sn=*`  
@@ -29,14 +23,23 @@ URL: `*`
 1. <kbd>Alt</kbd>+<kbd>Enter</kbd>=全螢幕模式  
 2. <kbd>F2</kbd>=切換`contenteditable`  
 3. <kbd>F4</kbd>=切換`userSelect='text'`
-4. 每天 5:3:30 自動打開 [《新楓之谷》x《為美好的世界獻上祝福！》合作活動頁面
+4. ~~每天 5:3:30 自動打開 [《新楓之谷》x《為美好的世界獻上祝福！》合作活動頁面~~ 活動結束
+
+### [【原神】每日自動簽到](/hoyo.js)(需[打開頁面](https://act.hoyolab.com/ys/event/signin-sea-v3/index.html?act_id=e202102251931481))
+URL: `https://*.hoyolab.com/*, https://*.hoyoverse.com/*, https://*.mihoyo.com/*`  
+<kbd>F9</kbd>=切換原神字型
+
+### [anime1](/anime1.js)
+URL: `https://*/*anime1.*/*`
+1. Chrome自動適應系統深色淺色模式
+2. (實驗性)方向左右鍵快進快退少5秒
+3. 單集頁面時倒數後自動下一集
 
 ### [《新楓之谷》x《為美好的世界獻上祝福！》合作活動](/TMSxKonoSuba3.js)
 URL: `https://tw-event.beanfun.com/maplestory/event/E20240410/Index.aspx`  
 登入後自動3抽
+活動已結束
 
-### [anime1](/anime1.js)
-URL: `anime1.*/`
-1. Chrome自動適應系統深色淺色模式
-2. (實驗性)方向左右鍵快進快退少5秒
-3. (開發中)自動下一集
+### [iLearning 3.0 1 位驗證碼](/lms2020.js)
+URL: `https://lms*.nchu.edu.tw/*`  
+暫時無用
