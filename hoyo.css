@@ -9,7 +9,6 @@
 	src: url(https://act.hoyoverse.com/ys/event/survey-collection/fonts/default.4b9a2491.ttf)
 }*/
 
-.hyl-group-b[data-route-name$=newArticle-view_type] .article-menu-fix-layout {
-	transform: translateX(-280px);
-	width: 280px;
+.hyl-group-b .root-page-container__content {
+	justify-content: right!important;
 }
