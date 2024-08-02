@@ -88,7 +88,7 @@
 }
 /* width */
 ::-webkit-scrollbar {
-    width: 1px;
+    width: 3px;
 }
 /* Handle on hover */
 /* ::-webkit-scrollbar-thumb:hover {

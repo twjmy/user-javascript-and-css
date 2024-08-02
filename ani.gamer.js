@@ -35,7 +35,7 @@ async function next(s = 0) {
       > div
       > a[data-gtm-notification="ani"]
     `)) {
-      if (a.href == document.URL) {
+      if (a.href == location.origin+location.pathname+`?sn=`+new URLSearchParams(location.search).get(`sn`)) {
         if (next) open(next, "_self");
         else {
           danmutxt.placeholder = `哈哈被騙了吧？沒有最新的動畫囉！`;
@@ -49,6 +49,9 @@ async function next(s = 0) {
       next = a.href;
     }
     danmutxt.placeholder = `⚠️找不到下一部最近更新的動畫`;
+    while (!TOPBAR_show)
+      await new Promise(requestAnimationFrame);
+    TOPBAR_show('light_1');
     const endtime = Date.now() + 2e3;
     while(Date.now() < endtime)
       await new Promise(requestAnimationFrame);
@@ -106,8 +109,14 @@ window.addEventListener('keyup', async event => {
   ) {
     switch (event.key) {
       case `Escape`: event.preventDefault(); return cancel();
-      case `Enter`:
-        return ani_video_html5_api.focus({ focusVisible: true });
+      case `Enter`: return ani_video_html5_api.focus({ focusVisible: true });
+    }
+  } else if ( Array.from(
+      document.querySelectorAll(".input-article-content[contenteditable]"))
+        .find(node => node.isEqualNode(document.activeElement))
+   ) {
+    switch (event.key) {
+      case `Enter`: return;
     }
   } else {
     switch (event.key.toLowerCase()) {
@@ -312,15 +321,30 @@ function agree(event = null) {
     // document.querySelector(`.vjs-button.vjs-fullscreen-control`).click();
     // document.querySelector(fullscreen).dispatchEvent(new MouseEvent(this.CLICK));
   }
+  while (!TOPBAR_show)
+    await new Promise(requestAnimationFrame);
   TOPBAR_show('light_1');
   TOPBAR_show('light_1');
+  while (!document.querySelector(`
+    #topBarMsgList_light_1
+    > div
+    > a[data-gtm-notification="ani"]
+  `)) await new Promise(requestAnimationFrame);
+  for (const a of document.querySelectorAll(`
+    #topBarMsgList_light_1
+    > div
+    > a[data-gtm-notification="ani"]
+  `)) a.target='_self';
   while (!document.querySelector(error))
     await new Promise(requestAnimationFrame);
   let endtime = Date.now() + 2e3;
   while(Date.now() < endtime)
     await new Promise(requestAnimationFrame);
-  const e = document.createElement(`div`);
-  document.querySelector(error).appendChild(e);
+  let e = document.querySelector(`.choose-btn-agree`);
+  if (!e) {
+    e = document.createElement(`div`);
+    document.querySelector(error).appendChild(e);
+  }
   e.addEventListener(`click`, cancel, true);
   window.addEventListener('keyup', async event => {
     if ( document.activeElement == window[`anime-search-sky`] ) {

@@ -92,16 +92,13 @@ addEventListener("keydown", event => {
 });
 
 if (localStorage.getItem("contentEditable")) {
-  localStorage.setItem("contentEditable", "true");
   document.documentElement.setAttribute('contenteditable', '');
   hint('按下 F2 即可結束網頁編輯模式');
 }
 if (localStorage.getItem("userSelect")) {
-  localStorage.setItem("userSelect", "true");
   document.documentElement.appendChild(userSelect);
   hint('按下 F4 即可結束網頁選取模式');
 }
-// toggleUserSelect();
 
 ~async function(){
   window.alert = message => {
@@ -175,6 +172,7 @@ if (location.href.includes(`honeyhunterworld.com/`)){
 }
 // 《新楓之谷》x《為美好的世界獻上祝福！》合作活動
 ~async function(){
+  if (Date.now()>=1715788800000) return;
   const MSTWxKonoSuba3url = 'https://tw-event.beanfun.com/maplestory/event/E20240410/login.aspx';
   if (location.href==MSTWxKonoSuba3url) return;
   var day = new Date();

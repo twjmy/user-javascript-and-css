@@ -32,7 +32,7 @@ URL: `*`
 4. 每天 5:3:30 自動打開 [《新楓之谷》x《為美好的世界獻上祝福！》合作活動頁面
 
 ### [《新楓之谷》x《為美好的世界獻上祝福！》合作活動](/TMSxKonoSuba3.js)
-URL: `https://tw-event.beanfun.com/maplestory/event/E20240410/Index.aspx`
+URL: `https://tw-event.beanfun.com/maplestory/event/E20240410/Index.aspx`  
 登入後自動3抽
 
 ### [anime1](/anime1.js)
