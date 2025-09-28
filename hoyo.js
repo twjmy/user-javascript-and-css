@@ -8,9 +8,11 @@
   finish = blahc + `task-__index_---task-finish---2y0qCh`,
   resign = blahc + `resign-modal-__index_---resign-btn---3oGNt6`,
   dialog = blahc + `common-dialog-__index_---sign-content---3PZVVu`,
-  /*hint = str=>console.log(str)*/
 ) {
   // https://stackoverflow.com/a/260876/13189986
+  let endtime = Date.now() + 2e3;
+  while(Date.now() < endtime)
+    await new Promise(requestAnimationFrame);
   var link = document.querySelector("link[rel~='icon']");
   if (!link) {
       link = document.createElement('link');
@@ -30,18 +32,6 @@
   ysFontFace.load();
   ysFontFontFace.load();
 
-  
-  const ysFontStyle = document.createElement("style");
-  ysFontStyle.setAttribute('id', 'ysFontStyle');
-  ysFontStyle.innerHTML = `
-    .location-name,
-    *:not([class*=icon]),
-    [mi18n-lang=zh-cn] *:not([class*=icon]),
-    [mi18n-lang=zh-tw] *:not([class*=icon]){
-        font-family: ys,ysFont,Microsoft YaHei,Neuropolitical,sans-serif!important;
-    }
-  `;
-
   while (!hint)
     await new Promise(requestAnimationFrame);
 
@@ -57,20 +47,17 @@
     ).catch(
       error=>console.log(error)
     );
-    document.head.appendChild(ysFontStyle);
   }
 
   window.addEventListener("keydown", event => {
     if (event.key == "F9") {
       if (localStorage.getItem("ysFontFace")) {
         localStorage.removeItem("ysFontFace");
-        document.head.appendChild(ysFontStyle);
         document.fonts.add(ysFontFace);
         document.fonts.add(ysFontFontFace);
         hint('套用原神字體');
       } else {
         localStorage.setItem("ysFontFace", "false");
-        ysFontStyle.remove();
         document.fonts.delete(ysFontFace);
         document.fonts.delete(ysFontFontFace);
         hint('按下 F9 切換原神字體');

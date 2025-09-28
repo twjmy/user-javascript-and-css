@@ -8,7 +8,53 @@
 	font-display: swap;
 	src: url(https://act.hoyoverse.com/ys/event/survey-collection/fonts/default.4b9a2491.ttf)
 }*/
+.location-name,
+*:not([class*=icon]),
+[mi18n-lang=zh-cn] *:not([class*=icon]),
+[mi18n-lang=zh-tw] *:not([class*=icon]){
+    font-family: ys,ysFont,Microsoft YaHei,Neuropolitical,sans-serif!important;
+}
+.hyl-group-b[data-route-name$=newArticle-view_type] .article-menu-fix-layout {
+	transform: translateX(-280px);
+	width: 280px;
+}
 
-.hyl-group-b .root-page-container__content {
-	justify-content: right!important;
+.bbs-qr.bbs-qr__zh-tw{
+  display: none;
+}
+
+.mhy-map .leaflet-control-zoomslider{
+  -webkit-transform: unset;
+  -ms-transform: unset;
+  transform: unset;
+}
+
+.area-list__title-icon{
+  width: .4rem;
+  height: .4rem;
+  margin-right: .08rem;
+}
+
+.area-list .area-list__title .title-area[data-v-1f09b882]{
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.area-list[data-v-1f09b882]{
+  position: relative;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: justify;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  padding: 0 0 0 .1rem;
+  width: 100%;
 }
