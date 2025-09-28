@@ -142,6 +142,7 @@ window.addEventListener('keyup', async event => {
           return;
         } else return agree(event);
       case `j`: case `.`: case `,`: case `>`:
+        agree(event);
         const 
           jump = event.key.toLowerCase() == `j`? (
             event.shiftKey? -90 : 87): (
@@ -156,14 +157,14 @@ window.addEventListener('keyup', async event => {
           );
         keyDown = {};
         hintd.classList.remove(hintsq);
-        hintd.firstElementChild.innerHTML
+        hintd.lastElementChild.innerHTML
           = `${Math.abs(jump)}s`;
         hintd.classList.add(hintsq);
         ani_video_html5_api.currentTime += jump;
         hintd.endtime = Date.now() + 1e3;
         while (Date.now() < hintd.endtime)
           await new Promise(requestAnimationFrame);
-        hintd.firstElementChild.innerHTML = `5s`;
+        hintd.lastElementChild.innerHTML = `5s`;
         return !event.shiftKey&& event.key.toLowerCase() !== `,`&&
           document.querySelector(".vjs-ended")?
           next() : hintd.classList.remove(hintsq);
@@ -209,58 +210,137 @@ function agree(event = null) {
     (typeof event.cancelBubble === 'function') &&
       event.cancelBubble();
   }, true);
-  const tipd = document.createElement(`div`);
-  document.body.appendChild(tipd);
-  tipd.style.cssText = `
-    position: fixed;
-    top: 10%;
-    right: 0%;
-    padding: 8px 14px;
-    background-color: rgba(0, 0, 0, 0.6);
-    line-height: 1.5;
-    width: fit-content;
-    min-width: fit-content;
-    border-radius: 4px;
-    color: #fff;
-    z-index: 99999;
-    font-size: 14px;
-    cursor: move;
+  
+  while (!document.getElementById(`ani-tab-content-2`))
+    await new Promise(requestAnimationFrame);
+  const tabContent  = document.getElementById(`ani-tab-content-2`);
+  
+  const settingSection = document.createElement(`div`);
+  settingSection.classList.add(`ani-setting-section`, `is-seperate`);
+  tabContent.insertBefore(settingSection, tabContent.firstChild);
+  settingSection.innerHTML = `
+<div class="ani-setting-item ani-flex" style="padding: 4px 16px 4px 0;">
+  <span class="ani-setting-title" style="display:inline-block">⚙️擴充功能 by VJ</span>
+  <span class="ani-setting-value ani-set-flex-right">
+    <span class="vipmark">add-on</span>
+  </span>
+</div>
+
+<div class="ani-setting-item ani-flex">
+  <div class="ani-setting-label">
+    <span class="ani-setting-label__mian">倒計時</span>
+    <div class="qa-icon" tip-content="單位:秒" style="display:inline-block; top:1px;">
+      <img src="https://i2.bahamut.com.tw/anime/smallQAicon.svg">
+    </div>
+  </div>
+  <div class="ani-setting-value ani-set-flex-right">
+    <input id="inputSeconds" type="number" min="0" maxlength="2" size="2" placeholder="秒" class="ani-input" style="width: 5rem;">
+  </div>
+</div>
+
+<div class="ani-setting-item ani-flex">
+  <div class="ani-setting-label">
+    <span class="ani-setting-label__mian">自動全螢幕(需按鍵觸發)</span>
+  </div>
+  <div class="ani-setting-value ani-set-flex-right">
+    <div class="ani-checkbox">
+      <label class="ani-checkbox__label">
+        <input id="inputFull" type="checkbox" name="ani-checkbox" checked>
+        <div class="ani-checkbox__button"></div>
+      </label>
+    </div>
+  </div>
+</div>
+
+<div class="ani-setting-item ani-flex">
+  <div class="ani-setting-label">
+    <span class="ani-setting-label__mian">自動播放</span>
+  </div>
+  <div class="ani-setting-value ani-set-flex-right">
+    <div class="ani-checkbox">
+      <label class="ani-checkbox__label">
+        <input id="inputAutoplay" type="checkbox" name="ani-checkbox" checked>
+        <div class="ani-checkbox__button"></div>
+      </label>
+    </div>
+  </div>
+</div>
+
+<div class="ani-setting-item ani-flex">
+  <div class="ani-setting-label">
+    <span class="ani-setting-label__mian">取消自動播放</span>
+    <div class="qa-icon" tip-content="點擊右側按鈕亦可作用" style="display:inline-block; top:1px;">
+      <img src="https://i2.bahamut.com.tw/anime/smallQAicon.svg">
+    </div>
+  </div>
+  <div class="ani-setting-value ani-set-flex-right">
+    <a role="button" class="bluebtn" style="cursor:pointer;user-select:none;" onclick="cancel()">Esc</a>
+  </div>
+</div>
+
+<div class="ani-setting-item ani-flex">
+  <div class="ani-setting-label">
+    <span class="ani-setting-label__mian">訂閱</span>
+    <div class="qa-icon" tip-content="鍵盤固定快捷鍵" style="display:inline-block; top:1px;">
+      <img src="https://i2.bahamut.com.tw/anime/smallQAicon.svg">
+    </div>
+  </div>
+  <div class="ani-setting-value ani-set-flex-right">
+    <span class="ani-setting-label__mian">N</span>
+  </div>
+</div>
+
+<div class="ani-setting-item ani-flex">
+  <div class="ani-setting-label">
+    <span class="ani-setting-label__mian">快進87秒</span>
+    <div class="qa-icon" tip-content="鍵盤固定快捷鍵" style="display:inline-block; top:1px;">
+      <img src="https://i2.bahamut.com.tw/anime/smallQAicon.svg">
+    </div>
+  </div>
+  <div class="ani-setting-value ani-set-flex-right">
+    <span class="ani-setting-label__mian">J</span>
+  </div>
+</div>
+
+<div class="ani-setting-item ani-flex">
+  <div class="ani-setting-label">
+    <span class="ani-setting-label__mian">倒退90秒</span>
+    <div class="qa-icon" tip-content="鍵盤固定快捷鍵" style="display:inline-block; top:1px;">
+      <img src="https://i2.bahamut.com.tw/anime/smallQAicon.svg">
+    </div>
+  </div>
+  <div class="ani-setting-value ani-set-flex-right">
+    <span class="ani-setting-label__mian">Shift + J</span>
+  </div>
+</div>
+
+<div class="ani-setting-item ani-flex">
+  <div class="ani-setting-label">
+    <span class="ani-setting-label__mian">上一集/下一集</span>
+    <div class="qa-icon" tip-content="鍵盤固定快捷鍵" style="display:inline-block; top:1px;">
+      <img src="https://i2.bahamut.com.tw/anime/smallQAicon.svg">
+    </div>
+  </div>
+  <div class="ani-setting-value ani-set-flex-right">
+    <span class="ani-setting-label__mian">Shift + P / N</span>
+  </div>
+</div>
+
+<div class="ani-setting-item ani-flex">
+  <div class="ani-setting-label">
+    <span class="ani-setting-label__mian">同意年齡分級</span>
+    <div class="qa-icon" tip-content="鍵盤固定快捷鍵" style="display:inline-block; top:1px;">
+      <img src="https://i2.bahamut.com.tw/anime/smallQAicon.svg">
+    </div>
+  </div>
+  <div class="ani-setting-value ani-set-flex-right">
+    <span class="ani-setting-label__mian">空格</span>
+  </div>
+</div>
   `;
-  tipd.innerHTML = `
-    <h3>巴哈姆特動漫瘋外掛 by VJ</h3>
-    <button>N</button>=訂閱<br>
-    [<button>Shift</button>+]<button>J</button>=快進87秒/倒退90秒<br>
-    <button>Shift</button>+<button>P</button>/<button>N</button>=上一集/下一集<br>
-    <button>␣</button>=同意年齡分級<br>
-    倒計時(秒)=<input id="inputSeconds" type="number" min="0" maxlength="2"><br>
-    自動全螢幕(需按鍵觸發) <input id="inputFull" type="checkbox"></input><br>
-    自動播放 <input id="inputAutoplay" type="checkbox"></input><br>
-    <button onclick="cancel()">
-      按Esc取消自動播放 </button><br>
-  `;
-  // EDITED form https://www.w3schools.com/howto/howto_js_draggable.asp
-  tipd.onmousedown = function dragMouseDown(e) {
-    e ||= window.event;
-    // e.preventDefault();
-    // get mouse cursor position at startup:
-    var posx = e.clientX, posy = e.clientY;
-    tipd.onmouseup = function closeDragElement() {
-      // stop moving when mouse button is released:
-      tipd.onmouseup = tipd.onmousemove = null;
-    };
-    // call a function whenever cursor moves:
-    tipd.onmousemove = function elementDrag(e) {
-      e ||= window.event;
-      // e.preventDefault();
-      // calculate new cursor position, set element's new position:
-      tipd.style.left = (tipd.offsetLeft - posx + e.clientX) + "px";
-      tipd.style.top = (tipd.offsetTop - posy + e.clientY) + "px";
-      posx = e.clientX, posy = e.clientY;
-    };
-  };
+
   let setSeconds = s;
   inputSeconds.value = setSeconds;
-  inputSeconds.onmousedown = () => tipd.onmouseup = tipd.onmousemove = null;
   inputSeconds.oninput = () => {
     localStorage.setItem("seconds",
       setSeconds = s
@@ -280,42 +360,35 @@ function agree(event = null) {
     localStorage.setItem(`autoplay`, true):
     localStorage.removeItem(`autoplay`);
 
-  const autoplayd = document.createElement(`div`);
-  autoplayd.style.cursor = `pointer`;
-  autoplayd.onclick = () => document.body.removeChild(tipd);
-  tipd.appendChild(autoplayd);
+  const autoplayd = window[`anime-search-sky`];
   if (!localStorage.getItem(`autoplay`)) {
     s = `esc`;
-    autoplayd.innerHTML = `❌`;
+    autoplayd.placeholder = `請輸入動畫名稱`;
   }
   else for (ifcancel = false; s > 0; s--) {
-    autoplayd.innerHTML = `${s} 秒後播放動畫...`;
+    autoplayd.placeholder = `請輸入動畫名稱...${s} 秒後播放動畫`;
     autoplayd.endtime = Date.now() + 1e3;
     while(Date.now() < autoplayd.endtime || !document.hasFocus())
       await new Promise(requestAnimationFrame);
     if (esc() || !localStorage.getItem(`autoplay`)) {
-      autoplayd.innerHTML = document.querySelector(`.choose-btn-agree`)?
-        `已取消自動播放動畫`:
-        `正在播放動畫...`;
+      autoplayd.placeholder = document.querySelector(`.choose-btn-agree`)?
+        `請輸入動畫名稱...已取消自動播放動畫`:
+        `請輸入動畫名稱...正在播放動畫`;
       autoplayd.endtime = Date.now() + 1e3;
       while(Date.now() < autoplayd.endtime)
         await new Promise(requestAnimationFrame);
-      autoplayd.innerHTML = `❌`;
-      if(!tipd.matches(':hover'))
-        document.body.removeChild(tipd);
+      autoplayd.placeholder = `請輸入動畫名稱`;
       s = `esc`;
       break;
     }
   }
   if (s != `esc`) {
-    autoplayd.innerHTML = `正在播放動畫...`;
+    autoplayd.placeholder = `正在播放動畫...`;
     agree();
     autoplayd.endtime = Date.now() + 1e3;
     while(Date.now() < autoplayd.endtime)
       await new Promise(requestAnimationFrame);
-    autoplayd.innerHTML = `❌`;
-    if(!tipd.matches(':hover'))
-      document.body.removeChild(tipd);
+    autoplayd.placeholder = `請輸入動畫名稱`;
     // https://stackoverflow.com/a/8086091/13189986
     // // ani_video.requestFullscreen();
     // document.querySelector(`.vjs-button.vjs-fullscreen-control`).click();
