@@ -148,7 +148,7 @@ if (location.href.includes(`honeyhunterworld.com/`)){
   ~async function(){
     while (!select(`select`))
       await new Promise(requestAnimationFrame);
-    for (selectElement of document.querySelectorAll(`select`)){
+    for (selectElement of document.querySelectorAll(`select.sorttable_per_page`)){
       selectElement.firstElementChild.innerHTML = Infinity;
       selectElement.value = Infinity;
     }
