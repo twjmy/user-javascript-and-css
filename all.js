@@ -145,6 +145,14 @@ if (location.href.includes(`honeyhunterworld.com/`)){
       await new Promise(requestAnimationFrame);
     select(`#ad-genshin-anchor`).remove();
   }();
+  ~async function(){
+    while (!select(`select`))
+      await new Promise(requestAnimationFrame);
+    for (selectElement of document.querySelectorAll(`select`)){
+      selectElement.firstElementChild.innerHTML = Infinity;
+      selectElement.value = Infinity;
+    }
+  }();
 } else if (location.href.includes(`outlook.live.com/`)) {
   ~async function(){
     while (!select(`.GssDD`))
